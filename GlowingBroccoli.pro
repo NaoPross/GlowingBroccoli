@@ -10,6 +10,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 INCLUDEPATH += src
 
-HEADERS += src/mainwindow.h
+HEADERS += src/mainwindow.h \
+    src/snake.h
 FORMS   += src/mainwindow.ui
-SOURCES += src/main.cpp src/mainwindow.cpp
+SOURCES += src/main.cpp src/mainwindow.cpp \
+    src/snake.cpp
