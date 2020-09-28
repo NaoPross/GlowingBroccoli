@@ -1,0 +1,25 @@
+language: cpp
+
+dist: focal
+
+os: linux
+
+branches:
+  - master
+  - /dev-*/
+
+addons:
+  apt:
+    packages:
+      - qtbase5-dev
+      - qt5-qmake
+      - make
+
+compiler:
+  - clang
+
+script:
+  - ci/build.sh
+
+notifications:
+  email: false
