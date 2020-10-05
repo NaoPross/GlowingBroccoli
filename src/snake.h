@@ -103,20 +103,23 @@ private:
     /// \brief Framerate of the game
     const unsigned fps = 60;
     /// \brief Update rate of the game
-    const unsigned ups = 60;
+    const unsigned ups = 15;
 
     Grid<CellT> grid;
     Direction direction;
 
     /// \brief Update the game state
     void updateGame();
-    /// \brief Draw the game state
-    void drawGame();
+
+    /// Timer id for frame update
+    int frameTimerId = -1;
+    /// Timer id for game update
+    int updateTimerId = -1;
 
     /// \brief Set the current direction in which Snake is moving
     /// \param d the Direction
     /// \sa Snake::Direction
-    void moveSnake(Direction d);
+    void moveSnake(Direction d) { direction = d; }
 };
 
 #endif // SNAKE_H
