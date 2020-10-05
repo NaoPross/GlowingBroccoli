@@ -11,8 +11,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->setScene(scene);
     Snake *snake = new Snake;
     scene->addItem(snake);
+    scene->installEventFilter(snake);
 
-
+    //Add Grid
     QPixmap bg(20,20);
     QPainter p(&bg);
     p.setBrush(QBrush(Qt::white));

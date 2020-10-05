@@ -15,7 +15,7 @@ Snake::Snake() {
 }
 
 QRectF Snake::boundingRect() const {
-    return QRectF(0,0,800,800);
+    return QRectF(0,0,800,800); //may need to be changed to dynamic size!
 }
 
 Snake::~Snake() {}
@@ -25,9 +25,9 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    painter->setBrush(Qt::red);
+    painter->setBrush(Qt::red); //set color of snake
     for(int z=0;z<tail;z++) {
-        painter->drawRect(x[z],y[z],RECT_SIZE,RECT_SIZE);
+        painter->drawRect(x[z],y[z],RECT_SIZE,RECT_SIZE); // draw snake
     }
 }
 
@@ -36,7 +36,26 @@ void Snake::moveSnake() {
         x[z] = x[z-1];
         y[z] = y[z-1];
     }
-        x[0] += RECT_SIZE;
+
+    switch(direction) {
+        case 1: //right
+         x[0] += RECT_SIZE;
+         break;
+        case 2: //up
+         y[0] -= RECT_SIZE;
+         break;
+        case 3: //left
+         x[0] -= RECT_SIZE;
+         break;
+        case 4: //down
+         y[0] += RECT_SIZE;
+         break;
+        }
+
+    if(x[0]>WINDOW_SIZE) {
+        x[0] = 0;
+    }
+
 }
 
 void Snake::timerEvent(QTimerEvent *event) {
@@ -46,3 +65,32 @@ void Snake::timerEvent(QTimerEvent *event) {
     moveSnake();
     update();
 }
+
+bool Snake::eventFilter(QObject *obj, QEvent *event) //function for key press
+ {
+     if (event->type() == QEvent::KeyPress) {
+         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+         // qDebug("Key Press %d", keyEvent->key());
+
+         switch(keyEvent->key()) {
+
+            case 16777236: //arrow right
+             direction = 1;
+             break;
+            case 16777235: //arrow up
+             direction = 2;
+             break;
+            case 16777234: //arrow left
+             direction = 3;
+             break;
+            case 16777237: //arrow down
+             direction = 4;
+             break;
+
+         }
+
+         return true;
+     } else {
+         return QObject::eventFilter(obj, event);
+     }
+ }
