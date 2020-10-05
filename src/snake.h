@@ -16,6 +16,12 @@ public:
     const unsigned width;
     const unsigned height;
 
+    // aliases
+    const unsigned& cols = width;
+    const unsigned& rows = height;
+
+    // delete constructors
+    // they could be implemented, but it is not really useful in this project
     Grid() = delete;
     Grid(const Grid& other) = delete;
     Grid(Grid&& other) = delete;
@@ -24,13 +30,13 @@ public:
     /// \param w the width / number of columns of the grid
     /// \param h the height / number of rows of the grid
     /// \param default_value the default value for the elements of the grid
-    Grid(unsigned w, unsigned h, T default_value)
-        : width(w), height(h)
+    Grid(unsigned w, unsigned h, T default_value, T invalid_value = static_cast<T>(0))
+        : width(w), height(h), invalid(invalid_value)
     {
         grid = new T*[height];
         for (unsigned row = 0; row < height; row++) {
             grid[row] = new T[height];
-            for (int col = 0; col < width; col++) {
+            for (unsigned col = 0; col < width; col++) {
                 grid[row][col] = default_value;
             }
         }
@@ -52,8 +58,8 @@ public:
         if (row < height && col < width) {
             return grid[row][col];
         }
-        // TODO: throw an exception or change the rv to optional<T>
-        return static_cast<T>(0);
+        // FIXME: throw an exception or change the rv to optional<T>
+        return invalid;
     }
 
     /// \sa Grid<T>::get
@@ -63,6 +69,7 @@ public:
 
 private:
     T **grid;
+    T invalid;
 };
 
 /// \brief Graphic object that draws the game of Snake
