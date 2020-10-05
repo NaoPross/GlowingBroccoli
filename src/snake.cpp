@@ -1,11 +1,14 @@
 #include "snake.h"
 #include <QDebug>
 
-Snake::Snake() : grid(80, 80, Snake::CellT::EMPTY) {
+Snake::Snake() : direction(Direction::RIGHT) {
     frameTimerId = startTimer(static_cast<int>(1000.0/fps));
     updateTimerId = startTimer(static_cast<int>(1000.0/ups));
 
-    grid.get(10, 0) = CellT::SNAKE_HEAD;
+    // TODO: generate randomly the first coordinate
+    // TODO: remove test code
+    snake.append({10, 2});
+    snake.append({11, 2});
 }
 
 Snake::~Snake() {}
@@ -30,70 +33,48 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    // TODO: cache
-    int rect_width = boundingRect().width() / grid.width;
-    int rect_height = boundingRect().height() / grid.height;
+    // TODO: cache this value, make 100 a parameter
+    const int cellWidth = static_cast<int>(boundingRect().width() / 100.);
 
-    for (unsigned row = 0; row < grid.rows; row++) {
-        for (unsigned col = 0; col < grid.cols; col++) {
-            switch (grid.get(row, col)) {
-            case CellT::EMPTY:
-                painter->setPen(Qt::white);
-                painter->setBrush(Qt::white);
-                break;
-
-            case CellT::FOOD:
-                painter->setBrush(Qt::red);
-                break;
-
-            case CellT::SNAKE_HEAD:
-                painter->setBrush(Qt::blue);
-                break;
-
-            case CellT::SNAKE_TAIL:
-                painter->setBrush(Qt::green);
-                break;
-            }
-
-            painter->drawRect(col * rect_width, row * rect_height, rect_width, rect_height);
-        }
+    // draw snake
+    painter->setBrush(Qt::red); // head color
+    for (Coordinate coord : snake) {
+        painter->drawRect(coord.x * cellWidth, coord.y * cellWidth, cellWidth, cellWidth);
+        painter->setBrush(Qt::green); // body color
     }
 }
 
 void Snake::updateGame() {
-    bool hasFood = false;
-    // FIXME: this does not work for more advanced changes
-    bool skipNextCell = false;
+    // TODO: collision checking
 
-    for (unsigned row = 0; row < grid.rows; row++) {
-        for (unsigned col = 0; col < grid.cols; col++) {
-            if (skipNextCell) {
-                skipNextCell = false;
-                continue;
-            }
+    // update snake
+    moveSnake(direction, 1);
+}
 
-            switch (grid.get(row, col)) {
-            case CellT::EMPTY:
-                // do nothing
-                break;
+void Snake::moveSnake(Direction d) {
+    switch (d) {
+        case Direction::UP:
+            snake.front().y -= 1;
+            break;
 
-            case CellT::FOOD:
-                hasFood = true;
-                break;
+        case Direction::DOWN:
+            snake.front().y += 1;
+            break;
 
-            case CellT::SNAKE_HEAD:
-                grid.get(row, col) = CellT::EMPTY;
-                grid.get(row, col +1) = CellT::SNAKE_HEAD;
-                skipNextCell = true;
-                break;
+        case Direction::LEFT:
+            snake.front().x -= 1;
+            break;
 
-            case CellT::SNAKE_TAIL:
-                break;
-            }
-        }
+        case Direction::RIGHT:
+            snake.front().x += 1;
+            break;
     }
 
-    // TODO
-    if (!hasFood) {
+    // TODO: move the rest of the body to follow the head
+}
+
+void Snake::moveSnake(Direction d, unsigned howmany) {
+    while (howmany--) {
+        moveSnake(d);
     }
 }
