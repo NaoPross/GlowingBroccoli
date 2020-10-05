@@ -15,11 +15,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void InitGame();
 
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+
 };
 
 
