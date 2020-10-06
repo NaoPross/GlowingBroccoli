@@ -22,6 +22,7 @@ protected:
 
     /// \sa QGraphicsObject::paint
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     /// \brief Framerate of the game

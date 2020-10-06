@@ -14,7 +14,7 @@ Snake::Snake() : direction(Direction::RIGHT) {
 Snake::~Snake() {}
 
 QRectF Snake::boundingRect() const {
-    return QRectF(0,0,800,800);
+    return QRectF(0,0,800,800); //may need to be changed to dynamic size!
 }
 
 void Snake::timerEvent(QTimerEvent *event) {
@@ -78,3 +78,32 @@ void Snake::moveSnake(Direction d, unsigned howmany) {
         moveSnake(d);
     }
 }
+
+bool Snake::eventFilter(QObject *obj, QEvent *event) //function for key press
+ {
+     if (event->type() == QEvent::KeyPress) {
+         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+         // qDebug("Key Press %d", keyEvent->key());
+
+         switch(keyEvent->key()) {
+
+            case 16777236: //arrow right
+             direction = 1;
+             break;
+            case 16777235: //arrow up
+             direction = 2;
+             break;
+            case 16777234: //arrow left
+             direction = 3;
+             break;
+            case 16777237: //arrow down
+             direction = 4;
+             break;
+
+         }
+
+         return true;
+     } else {
+         return QObject::eventFilter(obj, event);
+     }
+ }
