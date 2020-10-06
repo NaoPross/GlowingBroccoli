@@ -22,6 +22,7 @@ protected:
 
     /// \sa QGraphicsObject::paint
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    /// \sa QObject::eventFilter
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
@@ -33,6 +34,9 @@ private:
     enum class Direction { UP, DOWN, LEFT, RIGHT };
     struct Coordinate {
         int x, y;
+        bool operator==(const Coordinate& other) {
+            return (x == other.x) && (y = other.y);
+        }
     };
 
     // Coordinate food;
@@ -53,6 +57,10 @@ private:
     /// \sa Snake::Direction
     void moveSnake(Direction d);
 
+    /// \brief Move the snake in a given direction
+    /// \param d the direction
+    /// \param howmany how many steps
+    /// \sa Snake::Direction
     void moveSnake(Direction d, unsigned howmany);
 };
 

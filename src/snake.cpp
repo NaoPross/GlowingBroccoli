@@ -86,18 +86,21 @@ bool Snake::eventFilter(QObject *obj, QEvent *event) //function for key press
          // qDebug("Key Press %d", keyEvent->key());
 
          switch(keyEvent->key()) {
-
-            case 16777236: //arrow right
-             direction = 1;
+         case Qt::RightArrow:
+         case Qt::Key_D:
+             direction = Direction::RIGHT;
              break;
-            case 16777235: //arrow up
-             direction = 2;
+         case Qt::UpArrow:
+         case Qt::Key_W:
+             direction =  Direction::UP;
              break;
-            case 16777234: //arrow left
-             direction = 3;
+         case Qt::LeftArrow:
+         case Qt::Key_A:
+             direction = Direction::LEFT;
              break;
-            case 16777237: //arrow down
-             direction = 4;
+         case Qt::DownArrow:
+         case Qt::Key_S:
+             direction = Direction::DOWN;
              break;
 
          }

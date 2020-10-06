@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     Snake *snake = new Snake;
     scene->addItem(snake);
+    scene->installEventFilter(snake);
 }
 
 MainWindow::~MainWindow()
