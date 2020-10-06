@@ -31,7 +31,10 @@ private:
     /// \brief Update rate of the game
     const unsigned ups = 15;
 
+    /// \brief Directions in which Snake can move
     enum class Direction { UP, DOWN, LEFT, RIGHT };
+
+    /// \brief Very simple structure to hold 2D coordinates
     struct Coordinate {
         int x, y;
         bool operator==(const Coordinate& other) {

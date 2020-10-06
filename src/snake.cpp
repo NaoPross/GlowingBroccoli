@@ -18,9 +18,7 @@ QRectF Snake::boundingRect() const {
 }
 
 void Snake::timerEvent(QTimerEvent *event) {
-    Q_UNUSED(event);
     int eventTimerId = event->timerId();
-
     if (eventTimerId == frameTimerId) {
         // update graphics (calls paint)
         update();
@@ -52,6 +50,8 @@ void Snake::updateGame() {
 }
 
 void Snake::moveSnake(Direction d) {
+    // TODO: check if the position of the snake is outside of the bounding region
+
     switch (d) {
         case Direction::UP:
             snake.front().y -= 1;
@@ -83,26 +83,27 @@ bool Snake::eventFilter(QObject *obj, QEvent *event) //function for key press
  {
      if (event->type() == QEvent::KeyPress) {
          QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-         // qDebug("Key Press %d", keyEvent->key());
 
          switch(keyEvent->key()) {
-         case Qt::Key_Right:
-         case Qt::Key_D:
-             direction = Direction::RIGHT;
-             break;
-         case Qt::Key_Up:
-         case Qt::Key_W:
-             direction =  Direction::UP;
-             break;
-         case Qt::Key_Left:
-         case Qt::Key_A:
-             direction = Direction::LEFT;
-             break;
-         case Qt::Key_Down:
-         case Qt::Key_S:
-             direction = Direction::DOWN;
-             break;
+             case Qt::Key_Right:
+             case Qt::Key_D:
+                 direction = Direction::RIGHT;
+                 break;
 
+             case Qt::Key_Up:
+             case Qt::Key_W:
+                 direction =  Direction::UP;
+                 break;
+
+             case Qt::Key_Left:
+             case Qt::Key_A:
+                 direction = Direction::LEFT;
+                 break;
+
+             case Qt::Key_Down:
+             case Qt::Key_S:
+                 direction = Direction::DOWN;
+                 break;
          }
 
          return true;
