@@ -1,11 +1,11 @@
 #!/bin/sh
 # set -x
 
-mkdir -p build
-cd build
-
 # build documentation
 doxygen doc/doxygen/Doxyfile
+
+mkdir -p build
+cd build
 
 # build project
 qmake ../GlowingBroccoli.pro
