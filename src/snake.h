@@ -4,32 +4,67 @@
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QKeyEvent>
+#include <QVector>
 
+/// \brief Graphic object that draws the game of Snake
 class Snake : public QGraphicsObject
 {
 public:
     Snake();
     virtual ~Snake();
 
-    QRectF boundingRect () const override;
+    /// \sa QGrpahicsObject::boundingRect
+    QRectF boundingRect() const override;
 
 protected:
-    void timerEvent(QTimerEvent *event);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    /// \sa QObject::timerEvent
+    void timerEvent(QTimerEvent *event) override;
+
+    /// \sa QGraphicsObject::paint
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    /// \sa QObject::eventFilter
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
-    static const int RECT_SIZE = 20;
-    static const int MAX_SIZE = 100;
-    static const int MIN_SIZE = 3;
-    static const int DELAY = 120;
+    /// \brief Framerate of the game
+    const unsigned fps = 60;
+    /// \brief Update rate of the game
+    const unsigned ups = 15;
 
-    int x[MAX_SIZE];
-    int y[MAX_SIZE];
-    int direction;
-    int tail;
-    int timerId;
+    /// \brief Directions in which Snake can move
+    enum class Direction { UP, DOWN, LEFT, RIGHT };
 
-    void moveSnake();
+    /// \brief Very simple structure to hold 2D coordinates
+    struct Coordinate {
+        int x, y;
+        bool operator==(const Coordinate& other) {
+            return (x == other.x) && (y = other.y);
+        }
+    };
+
+    // Coordinate food;
+    QVector<Coordinate> snake;
+    Direction direction;
+    Coordinate food;
+
+    /// \brief Update the game state
+    void updateGame();
+
+    /// Timer id for frame update
+    int frameTimerId = -1;
+    /// Timer id for game update
+    int updateTimerId = -1;
+
+    /// \brief Move the snake by 1 in a given direction
+    /// \param d the Direction
+    /// \sa Snake::Direction
+    void moveSnake(Direction d);
+
+    /// \brief Move the snake in a given direction
+    /// \param d the direction
+    /// \param howmany how many steps
+    /// \sa Snake::Direction
+    void moveSnake(Direction d, unsigned howmany);
 };
 
 #endif // SNAKE_H
