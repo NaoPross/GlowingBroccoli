@@ -38,7 +38,11 @@ private:
     struct Coordinate {
         int x, y;
         bool operator==(const Coordinate& other) {
-            return (x == other.x) && (y = other.y);
+            return (x == other.x) && (y == other.y);
+        }
+
+        bool operator!=(const Coordinate& other) {
+            return !(*this == other);
         }
     };
 

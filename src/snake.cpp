@@ -7,8 +7,15 @@ Snake::Snake() : direction(Direction::RIGHT) {
 
     // TODO: generate randomly the first coordinate
     // TODO: remove test code
-    snake.append({10, 2});
+    snake.append({12, 2});
     snake.append({11, 2});
+    snake.append({10, 2});
+    snake.append({9, 2});
+    snake.append({8, 2});
+    snake.append({7, 2});
+    snake.append({6, 2});
+    snake.append({5, 2});
+    snake.append({4, 2});
 }
 
 Snake::~Snake() {}
@@ -46,31 +53,30 @@ void Snake::updateGame() {
     // TODO: collision checking
 
     // update snake
-    moveSnake(direction, 1);
+    moveSnake(direction);
 }
 
 void Snake::moveSnake(Direction d) {
     // TODO: check if the position of the snake is outside of the bounding region
 
+    Coordinate head = snake.first();
+
     switch (d) {
-        case Direction::UP:
-            snake.front().y -= 1;
+        case Direction::UP:  head.y -= 1;
             break;
-
-        case Direction::DOWN:
-            snake.front().y += 1;
+        case Direction::DOWN: head.y += 1;
             break;
-
-        case Direction::LEFT:
-            snake.front().x -= 1;
+        case Direction::LEFT: head.x -= 1;
             break;
-
-        case Direction::RIGHT:
-            snake.front().x += 1;
+        case Direction::RIGHT: head.x += 1;
             break;
     }
 
-    // TODO: move the rest of the body to follow the head
+    //...
+    if (head != snake.at(1)) {
+        snake.prepend(head);
+        snake.removeLast();
+    }
 }
 
 void Snake::moveSnake(Direction d, unsigned howmany) {
