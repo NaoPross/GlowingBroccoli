@@ -16,6 +16,8 @@ Snake::Snake() : direction(Direction::RIGHT) {
     snake.append({6, 2});
     snake.append({5, 2});
     snake.append({4, 2});
+
+    food = {50,50};
 }
 
 Snake::~Snake() {}
@@ -39,7 +41,7 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     Q_UNUSED(widget);
 
     // TODO: cache this value, make 100 a parameter
-    const int cellWidth = static_cast<int>(boundingRect().width() / 100.);
+    const int cellWidth = static_cast<int>(boundingRect().width() / 60.);
 
     // draw snake
     painter->setBrush(Qt::red); // head color
@@ -47,6 +49,10 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
         painter->drawRect(coord.x * cellWidth, coord.y * cellWidth, cellWidth, cellWidth);
         painter->setBrush(Qt::green); // body color
     }
+
+    // draw food
+    painter->setBrush(Qt::yellow); //food color
+    painter->drawRect(food.x * cellWidth, food.y  * cellWidth, cellWidth, cellWidth);
 }
 
 void Snake::updateGame() {
@@ -60,6 +66,8 @@ void Snake::moveSnake(Direction d) {
     // TODO: check if the position of the snake is outside of the bounding region
 
     Coordinate head = snake.first();
+
+
 
     switch (d) {
         case Direction::UP:  head.y -= 1;
@@ -75,8 +83,17 @@ void Snake::moveSnake(Direction d) {
     //...
     if (head != snake.at(1)) {
         snake.prepend(head);
-        snake.removeLast();
+
+
+        if (head == food) {
+
+            food = {rand()%10, rand()%10};
+        } else {
+            snake.removeLast();
+        }
+
     }
+
 }
 
 void Snake::moveSnake(Direction d, unsigned howmany) {
