@@ -1,0 +1,294 @@
+\documentclass[a4paper, twosided, 11pt]{scrartcl}
+
+%% Language configuration
+\usepackage{polyglossia}
+\setdefaultlanguage[variant=swiss]{german}
+
+%$ Specify where floatings go and make nicer looking tables
+\usepackage{float}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+%% Set up font
+\usepackage[T1]{fontenc}
+\usepackage[usefilenames, DefaultFeatures={Ligatures=Common}]{plex-otf}
+\renewcommand*\familydefault{\sfdefault}
+
+%% Header and Footers
+\usepackage[automark]{scrlayer-scrpage}
+\ihead{}
+\chead{}
+\ohead{\headmark}
+
+\ifoot{}
+\cfoot{}
+\ofoot{\pagemark}
+
+%% Tikz to draw stuff
+\usepackage{tikz}
+\usepackage{tikzsymbols}
+\usetikzlibrary{automata, positioning, arrows, calc, shapes.geometric, fit}
+
+%% Access metadata
+\usepackage{titling}
+
+% Metadata
+\title{Pflichtenheft}
+\author{Naoki Pross, Joanne Robertz, Steven Wegmann, J\'er\^ome Roy}
+
+% Document
+\begin{document}
+\begin{titlepage}
+  \begin{flushright}
+    % TODO: OST logo
+    \vspace{5cm}
+    {\Huge \bfseries \thetitle} \\
+    \vspace{5mm}
+    {\LARGE Project: \textit{GlowingBroccoli}} \\
+    \vspace{5mm}
+    {\LARGE \bfseries Version 3.1}
+  \end{flushright}
+\end{titlepage}
+
+
+\clearpage
+\section*{\"Anderungsgeschichte}
+\begin{tabularx}{\textwidth}{lrlX}
+  \toprule
+  \bfseries Datum & \bfseries Version & \bfseries Autor & \bfseries Beschreibung \\
+  \midrule
+  2020-10-05 & 1.0 & Robertz J. & Dokument erstellt \\
+  2020-10-19 & 2.0 & Robertz J. & Einleitung und allgemeine Beschreibung bearbeiten \\
+  2020-10-19 & 2.1 & Wegmann S.  & Funktionale Anforderungen bearbeiten \\
+  2020-10-19 & 2.2 & Roy J.     & Dokument bearbeiten \\
+  2020-10-19 & 2.3 & Pross N.   & Dokument bearbeiten \\
+  2020-10-22 & 3.0 & Pross N.   & Dokument in \textrm{\LaTeX} gesetzt \\
+  2020-10-23 & 3.1 & Pross N.   & Use Cases bearbeiten \\
+  \bottomrule
+\end{tabularx}
+
+\vfill
+\section*{Unterschriften}
+{
+  \renewcommand{\arraystretch}{2}
+  \begin{tabular}{lp{.4\textwidth}}
+    Pross Naoki    & \hrulefill \\
+    Robertz Joanne & \hrulefill \\
+    Roy J\'er\^ome & \hrulefill \\
+    Wegmann Steven & \hrulefill \\
+  \end{tabular}
+}
+
+\clearpage
+\tableofcontents
+\listoffigures
+\listoftables
+
+\clearpage
+
+\section{Einleitung}
+\subsection{Zweck}
+
+Im vorliegenden Dokument sind die Anforderungen definiert, welche im Projekt
+``GlowingBroccoli'' umgesetzt werden müssen. Es beschreibt den Auftrag zwischen
+Auftraggeber und Auftragnehmer. Der Ausdruck Pflichtenheft ist hier im Sinne
+der IEEE Recommended Practice for Software Requirements Specification.
+ANSI/IEEE Std 830-1998 verwendet. Die dort definierte Requirements
+Specification beinhaltet sowohl die Benutzeranforderungen (Lastenheft gemäss
+DIN 69901-5) als auch Realisierungsvorgaben an die Entwicklungsgruppe
+(Pflichtenheft gemäss DIN 69901-5).
+
+\subsection{Produk\"uberblick}
+Unser Team hat sich dafür entschieden das klassische ``Snake'' Spiel zu
+programmieren. Im Grunde geht es darum, durch bewegende Punkte, eine Schlange
+aufzubauen, die immer grösser wird, umso mehr sie isst.
+Als Abbruchbedingungen mit gefolgtem ``Game Over'' zählt:
+\begin{itemize}
+  \item Die Schlange berührt die Wand.
+  \item Die Schlange frisst sich selber, zum Beispiel weil sie so lang geworden
+    ist, dass es unmöglich ist sie im Spielfeld weiterhin agil zu bewegen.
+\end{itemize}
+
+\subsection{Definitionen, Akronyme und Abk\"urkungen}
+
+\begin{description}
+  \item[Widget] Diese Umgebung wird innerhalb des Fensters aufgebaut und dient
+    um einen dynamischen Verlauf, wie z.B. ein Spiel, aufzubauen.
+\end{description}
+
+\section{Allgemeine Beschreibung}
+\subsection{System\"ubersicht}
+\begin{figure}[H]
+  \centering
+  \include{tex/system-overview}
+  \caption[Beispiel f\"ur grafische Oberfl\"ache in Use Case Play]{Beispiel dafür, wie die grafische Oberfläche f\"ur das Use-Case Play aussehen sollte.}
+\end{figure}
+
+\subsection{Produktfunktionen} \label{sec:product-functions}
+\begin{itemize}
+  \item Das Spiel wird mittels einem Startknopf eröffnet.
+
+  \item Die Schlange muss mittels den vier Pfeiltasten (oder \texttt{WASD})
+    bewegt werden können.
+
+  \item Das herumliegende Essen muss sich der Schlange anschliessen als Punkt,
+    damit sie sich nach jedem Bissen auch vergrössert.
+
+  \item ``Game Over'' muss erscheinen, wenn die Schlange aus einer bestimmten
+    Abbruchsbedingung stirbt.
+
+  \item Ein Scoreboard zeigt dem Benutzer die Ingame-Punkte der vorherigen Spiele an.
+\end{itemize}
+
+\subsection{Benutzereingenschaften}
+Dieses Projekt soll Benutzergruppen ansprechen die gerne ihre Zeit in einen
+lustigen Klassiker investieren möchten. Eine Altersbeschränkung gibt es hier
+nicht.
+
+\subsection{Einschr\"ankungen}
+Keite.
+
+\subsection{Annahmen und Abh\"angigkeiten}
+Die Software soll auf allen der drei Hauptplattformen, nämlich Windows 10,
+MacOS und Linux laufen. Dies kann durch \texttt{C++} als Programmiersprache und
+das plattformübergreifende Qt Framework erreicht werden. Von der User Hardware
+wird erwartet, dass sie die Fähigkeit hat einfache Grafiken darzustellen und
+über eine moderne grafische Umgebung verfügt.
+
+\subsection{Priorisierung der Anforderungen}
+Die Funktionen, welche in \S\ref{sec:product-functions} ersichtlich sind,
+beschreiben die Muss-Anforderungen welche benötigt werden, um den minimalen
+Zweck der Software zu erfüllen. Als Soll-Anforderungen wird die Implementation
+von optisch schöneren Grafiken beschrieben.  Die Wunsch-Anforderung beinhaltet
+das Einfügen von weiteren Funktionen im Spiel, wie zum Beispiel verschiedene
+Früchte oder die Implementation eines ``Scoreboards''.
+
+\section{Externe Schnittstellen}
+Keine, ausser Tastatur und Bildschirm.
+
+\section{Funktionale Anforderungen}
+\begin{figure}[h]
+  \centering
+  \include{tex/use-cases}
+  \caption{Use-case Diagramm}
+\end{figure}
+
+\subsection{Actors}
+\begin{table}[H]
+  \centering
+  \begin{tabular}{ll}
+    \toprule
+    Actors & Beschreibung \\
+    \midrule
+    Player & Die Eingaben des Users beeinflussen den Verlauf des Spiels. \\
+    \bottomrule
+  \end{tabular}
+  \caption{Liste der Actors}
+\end{table}
+
+\subsection{Kurzbeschreibung der Use Cases}
+\begin{table}[H]
+  \centering
+  \begin{tabular}{lp{.75\linewidth}}
+    \toprule
+    Use Case & Beschreibung \\
+    \midrule
+    % \texttt{Exit} & Beim betätigen der Systemtaste \texttt{E} verlässt man das Spiel
+    % sofort und gelangt auf die Hauptseite, wo sich wiederum der Startknopf
+    % befindet. \\None, except keyboard and display.
+
+    Menu & Der Spieler kann einen Namen eingeben und wählen, ob er spielen oder
+    die \emph{Scoreboard} sehen möchte. \\
+
+    Play & Das Spiel \emph{Snake} spielen. \\
+
+    Pause & Beim betätigen der Systemtaste \texttt{P} oder \texttt{ESC} wird
+    das Spiel pausiert. Beim erneuten drücken, geht das Spiel weiter. \\
+
+    Game Over & Der Spieler hat das Spiel verloren, sein Punktestand wird auf
+    dem Bildschirm angezeigt. \\
+
+    Scoreboard & Es wird eine Liste der früheren Spiele desselben oder eines
+    anderen Spielers angezeigt. \\
+
+    \bottomrule
+  \end{tabular}
+  \caption{Kurzbeschreibung der Use Cases}
+\end{table}
+
+\subsection{Use Case Menu}
+\paragraph{Vorbedingungen} Es gibt eine grafische Umgebung. Programm muss laufen.
+% \paragraph{Nachbedingungen}
+% \paragraph{Nicht-Funktionale Anforderungen}
+\paragraph{Haputszenario} Spieler hat das Programm gestartet
+% \paragraph{Unterszenarien}
+\paragraph{Fehlerszenarien} Es gibt keine grafische Umgebung.
+% \paragraph{Regeln}
+% \paragraph{Anmerkungen}
+% \paragraph{Beispiele}
+
+\subsection{Use Case Play}
+\paragraph{Vorbedingungen} Die Tastatur muss vorhanden sein.
+% \paragraph{Nachbedingungen}
+% \paragraph{Nicht-Funktionale Anforderungen}
+\paragraph{Haputszenario} Die Spieler möchten ein Spiel spielen.
+% \paragraph{Unterszenarien}
+\paragraph{Fehlerszenarien} Es ist keine Tastatur vorhanden.
+\paragraph{Regeln}
+Die Schlange wird mit der Tastatur gesteuert. Die Schlange darf sich nicht aus
+dem sichtbaren Bereich entfernen. Es ist der Schlange auch nicht erlaubt, ihren
+eigenen Körper zu durchqueren. Wenn beides geschieht, kommt es zu einem Game
+Over.
+
+% \paragraph{Anmerkungen}
+% \paragraph{Beispiele}
+
+\subsection{Use Case Pause}
+\paragraph{Vorbedingungen} Es muss ein laufendes Spiel geben.
+% \paragraph{Nachbedingungen}
+% \paragraph{Nicht-Funktionale Anforderungen}
+\paragraph{Haputszenario}
+Die Spieler wollen das Spiel unterbrechen, um etwas anderes zu tun. Und
+vielleicht später wieder aufnehmen oder das Spiel beenden.
+% \paragraph{Unterszenarien}
+% \paragraph{Fehlerszenarien}
+\paragraph{Regeln}
+Wenn das Spiel andauert, wird es unterbrochen. Wenn das Spiel bereits
+angehalten ist, sollte es wieder aufgenommen werden. Es sollte auch möglich
+sein, das Spiel zu beenden und zum Hauptmenü zurückzukehren.
+% \paragraph{Anmerkungen}
+% \paragraph{Beispiele}
+
+\subsection{Use Case Game Over}
+\paragraph{Vorbedingungen} Es muss ein laufendes Spiel geben.
+\paragraph{Nachbedingungen} Das Spiel endet.
+% \paragraph{Nicht-Funktionale Anforderungen}
+\paragraph{Haputszenario}
+% \paragraph{Unterszenarien}
+% \paragraph{Fehlerszenarien}
+% \paragraph{Regeln}
+% \paragraph{Anmerkungen}
+% \paragraph{Beispiele}
+
+\subsection{Use Case Scoreboard}
+% \paragraph{Vorbedingungen}
+% \paragraph{Nachbedingungen}
+% \paragraph{Nicht-Funktionale Anforderungen}
+% \paragraph{Haputszenario}
+% \paragraph{Unterszenarien}
+% \paragraph{Fehlerszenarien}
+% \paragraph{Regeln}
+% \paragraph{Anmerkungen}
+% \paragraph{Beispiele}
+
+\section{Sonstige Anforderungen}
+
+\addcontentsline{toc}{section}{Referenzen}
+\renewcommand{\refname}{Referenzen}
+\begin{thebibliography}{2}
+  \bibitem{ieee}
+    IEEE Recommended Practice for Software Requirements Specification. ANSI/IEEE Std 830-1998
+\end{thebibliography}
+
+\end{document}

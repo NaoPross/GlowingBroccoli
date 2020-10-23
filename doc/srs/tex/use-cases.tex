@@ -1,0 +1,55 @@
+\begin{tikzpicture}[
+    usecase/.style = {
+      ellipse, draw, very thick, fill=gray!20,
+      inner sep = 4pt, outer sep = 3pt
+    },
+    user/.pic = {
+      \begin{scope}[line width = 1.5mm]
+        \node[draw, circle, inner sep = .2cm] (head) {};
+        %
+        \draw (head.south) to +(0,-.2) node[inner sep = 0, outer sep = 0] (neck) {};
+        \draw (neck.south) to +(0,-.5) node[inner sep = 0, outer sep = 0] (waist) {};
+        %
+        \draw (neck.center) to +(.5, -.2);
+        \draw (neck.center) to +(-.5, -.2);
+        %
+        \draw (waist.center) to +(-.3, -.6);
+        \draw (waist.center) to +(.3, -.6);
+      \end{scope}
+    },
+  ]
+  \begin{scope}
+    \node[usecase] (menu) {Menu};
+    \node[usecase, below = of menu] (game) {Play};
+    \node[usecase, below = of game] (pause) {Pause};
+    \node[usecase, right = of menu] (scoreboard) {Scoreboard};
+    \node[usecase, right = of pause] (gameover) {Game Over};
+
+    \begin{scope}[very thick]
+      \draw[->, gray] (menu) to (game);
+      \draw[<->, gray] (menu) to (scoreboard);
+      \draw[<->, gray] (game) to (pause);
+      \draw[<-, dashed] (game) to[out = 10, in = -120]
+        node[pos = .7, above left] {\small extends} (scoreboard);
+      \draw[<-, dashed] (game) to[out = -10, in = 120]
+        node[pos = .7, below left] {\small extends} (gameover);
+      \draw[->, gray] (gameover) to[out = 70, in = -70] (scoreboard);
+    \end{scope}
+  \end{scope}
+
+  \node[very thick, draw, dashed, gray, fit = {
+    ($(pause.south west) + (-1, -1)$)
+    ($(scoreboard.north east) + (1, 1)$)
+  }] (boundary) {};
+
+  \node[above, gray] at (boundary.north) {\textbf{Snake Game}};
+
+  \node[left = of boundary.west, outer sep = 5mm, xshift = -1cm] (player) {};
+  \pic[at = {(player.center)}] {user};
+  \node[below = of player] {Player};
+
+  \draw[->, very thick] (player) to[controls = +(20:2) and +(180:2) ] (menu);
+  \draw[->, very thick] (player) to[controls = +(0:2) and +(180:2) ] (game);
+  \draw[->, very thick] (player) to[controls = +(-20:2) and +(180:2) ] (pause);
+
+\end{tikzpicture}
