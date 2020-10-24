@@ -1,5 +1,5 @@
 \begin{tikzpicture}
-  \draw[lightgray, step = 5mm] (0,0) grid (10, 5);
+  \draw[lightgray, step = 5mm, dotted] (0,0) grid (10, 5);
 
   %% Food
   \node at (8, 2) (food) {};
@@ -27,5 +27,5 @@
     node[above] {\textbf{Snake}};
 
   \draw[->, ultra thick, green!50!black] ($ (snake-head.east) - (0, .25) $) to +(1, 0)
-    node[right] {\textbf{Direction}};
+    node[right] {};
 \end{tikzpicture}
