@@ -48,7 +48,7 @@
     \vspace{5mm}
     {\LARGE Project: \textit{GlowingBroccoli}} \\
     \vspace{5mm}
-    {\LARGE \bfseries Version 3.3}
+    {\LARGE \bfseries Version 3.4}
   \end{flushright}
 \end{titlepage}
 
@@ -59,15 +59,16 @@
   \toprule
   \bfseries Datum & \bfseries Version & \bfseries Autor & \bfseries Beschreibung \\
   \midrule
-  2020-10-05 & 1.0 & Robertz J. & Dokument erstellt \\
-  2020-10-19 & 2.0 & Robertz J. & Einleitung und allgemeine Beschreibung bearbeiten \\
-  2020-10-19 & 2.1 & Wegmann S. & Funktionale Anforderungen bearbeiten \\
-  2020-10-19 & 2.2 & Roy J.     & Dokument bearbeiten \\
-  2020-10-19 & 2.3 & Pross N.   & Dokument bearbeiten \\
-  2020-10-22 & 3.0 & Pross N.   & Dokument in \textrm{\LaTeX} gesetzt \\
-  2020-10-23 & 3.1 & Pross N.   & Use Cases bearbeiten \\
-  2020-10-24 & 3.2 & Roy J.     & Dokument bearbeiten \\
-  2020-10-24 & 3.3 & Roy J., Pross N.     & Use Cases bearbeiten \\
+  2020-10-05 & 1.0 & Robertz J.       & Dokument erstellt \\
+  2020-10-19 & 2.0 & Robertz J.       & Einleitung und allgemeine Beschreibung bearbeiten \\
+  2020-10-19 & 2.1 & Wegmann S.       & Funktionale Anforderungen bearbeiten \\
+  2020-10-19 & 2.2 & Roy J.           & Dokument bearbeiten \\
+  2020-10-19 & 2.3 & Pross N.         & Dokument bearbeiten \\
+  2020-10-22 & 3.0 & Pross N.         & Dokument in \textrm{\LaTeX} gesetzt \\
+  2020-10-23 & 3.1 & Pross N.         & Use Cases bearbeiten \\
+  2020-10-24 & 3.2 & Roy J.           & Dokument bearbeiten \\
+  2020-10-24 & 3.3 & Roy J., Pross N. & Use Cases bearbeiten \\
+  2020-10-25 & 3.4 & Roy J., Pross N. & Typos und Fehlern korrigiert \\
   \bottomrule
 \end{tabularx}
 
@@ -106,17 +107,19 @@ DIN 69901-5) als auch Realisierungsvorgaben an die Entwicklungsgruppe
 \begin{figure}[H]
   \centering
   \include{tex/system-overview}
-  \caption[Beispiel f\"ur grafische Oberfl\"ache in Use Case Play]{Beispiel dafür, wie die grafische Oberfläche f\"ur das Use-Case Play aussehen sollte.}
+  \caption[Beispiel f\"ur grafische Oberfl\"ache in Use Case Play]{
+    Beispiel dafür, wie die grafische Oberfläche f\"ur das Use-Case Play aussehen sollte.
+  }
 \end{figure}
 
 Unser Team hat sich dafür entschieden das klassische ``Snake'' Spiel zu
 programmieren.  Im Spiel sind Sie eine Schlange, deren Ziel es ist, sich auf
 einer Karte zu bewegen und die zufällig auftauchende Nahrung zu essen. Wenn
-eine Nahrungseinheit gegessen wird, dehnt sich die Schlange aus und der
-Spielpunkt wird erhöht.  Ziel des Spiels ist es, die höchstmögliche Punktzahl
-zu erreichen.  Der Benutzer verliert sein Spiel, wenn der Kopf der Schlange
-einen festen Gegenstand (die Wände der Spielkarte) berührt oder wenn der Kopf
-einen Teil seines Körpers frisst.  In dieser Version der Schlange wird es
+eine Nahrungseinheit gegessen wird, dehnt sich die Schlange aus und die
+Punkzahl wird erhöht.  Ziel des Spiels ist es, die höchstmögliche Punktzahl zu
+erreichen.  Der Benutzer verliert sein Spiel, wenn der Kopf der Schlange einen
+festen Gegenstand (die Wände der Spielkarte) berührt oder wenn der Kopf einen
+Teil seines Körpers frisst.  In dieser Version der \emph{Snake} wird es
 verschiedene Ebenen geben. Jede Stufe hat eine Siegpunktzahl zu erreichen, um
 zur nächsten überzugehen. Wenn der Spieler die zuletzt vorgeschlagene Stufe
 erreicht, hat er das Spiel gewonnen.
@@ -131,11 +134,12 @@ erreicht, hat er das Spiel gewonnen.
 %     ist, dass es unmöglich ist sie im Spielfeld weiterhin agil zu bewegen.
 % \end{itemize}
 
-\subsection{Definitionen, Akronyme und Abk\"urkungen}
+\subsection{Definitionen, Akronyme und Abk\"urzungen}
 
 \begin{description}
   \item[Widget] Diese Umgebung wird innerhalb des Fensters aufgebaut und dient
     um einen dynamischen Verlauf, wie z.B. ein Spiel, aufzubauen.
+  \item[Scoreboard] Liste der bisherigen Stücke nach Punktzahl geordnet.
 \end{description}
 
 \section{Allgemeine Beschreibung}
@@ -180,11 +184,11 @@ gebraucht.
 Keite.
 
 \subsection{Annahmen und Abh\"angigkeiten}
-Die Software soll auf allen der drei Hauptplattformen, nämlich Windows 10,
-MacOS und Linux laufen. Dies kann durch \texttt{C++} als Programmiersprache und
-das plattformübergreifende Qt Framework erreicht werden. Von der User Hardware
-wird erwartet, dass sie die Fähigkeit hat einfache Grafiken darzustellen und
-über eine moderne grafische Umgebung verfügt.
+Die Software soll auf allen der drei Hauptplattformen: Windows 10, MacOS und
+Linux laufen. Dies kann durch \texttt{C++} als Programmiersprache und das
+plattformübergreifende Qt Framework erreicht werden. Von der User Hardware wird
+erwartet, dass sie die Fähigkeit hat einfache Grafiken darzustellen und über
+eine moderne grafische Umgebung verfügt.
 
 \subsection{Priorisierung der Anforderungen}
 Die Funktionen, welche in \S\ref{sec:product-functions} ersichtlich sind,
@@ -192,7 +196,8 @@ beschreiben die Muss-Anforderungen welche benötigt werden, um den minimalen
 Zweck der Software zu erfüllen. Als Soll-Anforderungen wird die Implementation
 von optisch schöneren Grafiken beschrieben.  Die Wunsch-Anforderung beinhaltet
 das Einfügen von weiteren Funktionen im Spiel, wie zum Beispiel verschiedene
-Früchte oder die Implementation eines ``Scoreboards''.
+Früchte, mehrere \emph{Levels} oder die Implementation eines
+``Scoreboards''.
 
 \section{Externe Schnittstellen}
 Es gibt keine speziellen externen Schnittstellen für diese Software. Sie
@@ -267,7 +272,7 @@ oder das Programm schliessen.
 \paragraph{Regeln}
 Die Schlange wird mit der Tastatur gesteuert. Die Schlange darf sich nicht aus
 dem sichtbaren Bereich entfernen. Es ist der Schlange auch nicht erlaubt, ihren
-eigenen Körper zu durchqueren. Wenn beides geschieht, kommt es zu einem Game
+eigenen Körper zu durchqueren. Wenn einer dieser zwei F\"alle geschieht, kommt es zu einem Game
 Over.
 
 \paragraph{Anmerkungen} Keine.
@@ -286,7 +291,7 @@ zum Hauptmenu zu zur\"uckkehren.
 
 \paragraph{Unterszenarien} Keine.
 
-\paragraph{Fehlerszenarien} Es gibt kein laufende Spiel.
+\paragraph{Fehlerszenarien} Es gibt kein laufendes Spiel.
 \paragraph{Regeln}
 Wenn das Spiel lauft, wird es unterbrochen. Wenn das Spiel bereits angehalten
 ist, sollte es wieder aufgenommen werden. Es sollte auch möglich sein, das
@@ -321,15 +326,18 @@ Bildschirm gezeigt.
 
 \section{Sonstige Anforderungen}
 
-Die grafische Qualität des Spiels wird einfach und begrenzt sein, da wir die
-Grundfunktionen von Qt zum Zeichnen der verschiedenen Komponenten verwenden. 
-Diese Software wurde für die aktuelle Version der Betriebssysteme Linux,
-Windows 10 und Mac OS Catalina entwickelt. Es wird keine Updates für neuere
-Betriebssysteme geben.
+\subsection{Entwurfseinschränkungen (Design Constraints)} Die grafische Qualität
+des Spiels wird einfach und begrenzt sein, da wir die Grundfunktionen von Qt
+zum Zeichnen der verschiedenen Komponenten verwenden.
 
-Der Benutzer muss sich nicht registrieren, um das Spiel spielen zu können. Es
-gibt jedoch die Idee, vergangene Spiele lokal zu speichern, so dass Sie die in
-verschiedenen Spielen erzielten Ergebnisse vergleichen können.
+\subsection{Wartbarkeit} Diese Software wurde für die aktuelle Version der
+Betriebssysteme Linux, Windows 10 und Mac OS Catalina entwickelt. Es wird keine
+Updates für neuere Betriebssysteme geben.
+
+\subsection{Logging und Tracing} Der Benutzer muss sich nicht registrieren, um
+das Spiel spielen zu können. Es gibt jedoch die Idee, vergangene Spiele lokal
+zu speichern, so dass Sie die in verschiedenen Spielen erzielten Ergebnisse
+vergleichen können.
 
 \addcontentsline{toc}{section}{Referenzen}
 \renewcommand{\refname}{Referenzen}
