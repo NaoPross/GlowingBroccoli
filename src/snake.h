@@ -32,7 +32,7 @@ private:
     const unsigned ups = 15;
 
     /// \brief Directions in which Snake can move
-    enum class Direction { UP, DOWN, LEFT, RIGHT };
+    enum class Direction : unsigned { UP, DOWN, LEFT, RIGHT };
 
     /// \brief Very simple structure to hold 2D coordinates
     struct Coordinate {
