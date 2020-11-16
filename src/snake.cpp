@@ -1,23 +1,43 @@
 #include "snake.h"
 #include <QDebug>
+#include <QRandomGenerator>
 
-Snake::Snake() : direction(Direction::RIGHT) {
+Snake::Snake() {
     frameTimerId = startTimer(static_cast<int>(1000.0/fps));
     updateTimerId = startTimer(static_cast<int>(1000.0/ups));
 
     // TODO: generate randomly the first coordinate
     // TODO: remove test code
-    snake.append({12, 2});
-    snake.append({11, 2});
-    snake.append({10, 2});
-    snake.append({9, 2});
-    snake.append({8, 2});
-    snake.append({7, 2});
-    snake.append({6, 2});
-    snake.append({5, 2});
-    snake.append({4, 2});
 
-    food = {50,50};
+    Coordinate head = {
+        QRandomGenerator::global()->bounded(0,gridsize), QRandomGenerator::global()->bounded(0,gridsize)
+    };
+
+    direction = static_cast<Direction>(QRandomGenerator::global()->bounded(0,4));
+
+    snake.append(head);
+    switch (direction) {
+    case Direction::UP:
+        snake.append({head.x, head.y +1});
+        snake.append({head.x, head.y +2});
+        break;
+    case Direction::DOWN:
+        snake.append({head.x, head.y -1});
+        snake.append({head.x, head.y -2});
+        break;
+    case Direction::LEFT:
+        snake.append({head.x +1, head.y});
+        snake.append({head.x +2, head.y});
+        break;
+    case Direction::RIGHT:
+        snake.append({head.x -1, head.y});
+        snake.append({head.x -2, head.y});
+        break;
+    }
+
+    food = {
+        QRandomGenerator::global()->bounded(0,60), QRandomGenerator::global()->bounded(0,60)
+    };
 }
 
 Snake::~Snake() {}
@@ -41,7 +61,7 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     Q_UNUSED(widget);
 
     // TODO: cache this value, make 100 a parameter
-    const int cellWidth = static_cast<int>(boundingRect().width() / 60.);
+    const int cellWidth = static_cast<int>(boundingRect().width() / static_cast<double>(gridsize));
 
     // draw snake
     painter->setBrush(Qt::red); // head color
@@ -88,7 +108,7 @@ void Snake::moveSnake(Direction d) {
         if (head == food) {
 
             do {
-                food = {rand()%10, rand()%10};
+                food = {QRandomGenerator::global()->bounded(0,gridsize), QRandomGenerator::global()->bounded(0,gridsize)};
             } while (snake.contains(food) == true);
 
         } else {
