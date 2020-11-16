@@ -46,10 +46,11 @@ private:
         }
     };
 
-    // Coordinate food;
+
     QVector<Coordinate> snake;
     Direction direction;
     Coordinate food;
+    const int gridsize = 60;
 
     /// \brief Update the game state
     void updateGame();

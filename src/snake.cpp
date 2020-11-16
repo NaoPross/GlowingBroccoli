@@ -10,7 +10,7 @@ Snake::Snake() {
     // TODO: remove test code
 
     Coordinate head = {
-        QRandomGenerator::global()->bounded(0,60), QRandomGenerator::global()->bounded(0,60)
+        QRandomGenerator::global()->bounded(0,gridsize), QRandomGenerator::global()->bounded(0,gridsize)
     };
 
     direction = static_cast<Direction>(QRandomGenerator::global()->bounded(0,4));
@@ -61,7 +61,7 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     Q_UNUSED(widget);
 
     // TODO: cache this value, make 100 a parameter
-    const int cellWidth = static_cast<int>(boundingRect().width() / 60.);
+    const int cellWidth = static_cast<int>(boundingRect().width() / static_cast<double>(gridsize));
 
     // draw snake
     painter->setBrush(Qt::red); // head color
@@ -108,7 +108,7 @@ void Snake::moveSnake(Direction d) {
         if (head == food) {
 
             do {
-                food = {rand()%10, rand()%10};
+                food = {QRandomGenerator::global()->bounded(0,gridsize), QRandomGenerator::global()->bounded(0,gridsize)};
             } while (snake.contains(food) == true);
 
         } else {
