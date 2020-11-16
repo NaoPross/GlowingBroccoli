@@ -107,7 +107,10 @@ void Snake::moveSnake(Direction d) {
 
         if (head == food) {
 
-            food = {rand()%10, rand()%10};
+            do {
+                food = {rand()%10, rand()%10};
+            } while (snake.contains(food) == true);
+
         } else {
             snake.removeLast();
         }
@@ -128,25 +131,38 @@ bool Snake::eventFilter(QObject *obj, QEvent *event) //function for key press
          QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
 
          switch(keyEvent->key()) {
-             case Qt::Key_Right:
-             case Qt::Key_D:
+         case Qt::Key_Right:
+         case Qt::Key_D:
+
+             if (direction != Direction::LEFT) {
                  direction = Direction::RIGHT;
-                 break;
+             }
 
-             case Qt::Key_Up:
-             case Qt::Key_W:
+             break;
+
+         case Qt::Key_Up:
+         case Qt::Key_W:
+
+             if (direction != Direction::DOWN) {
                  direction =  Direction::UP;
-                 break;
+             }
+             break;
 
-             case Qt::Key_Left:
-             case Qt::Key_A:
+         case Qt::Key_Left:
+         case Qt::Key_A:
+
+             if (direction != Direction::RIGHT) {
                  direction = Direction::LEFT;
-                 break;
+             }
+             break;
 
-             case Qt::Key_Down:
-             case Qt::Key_S:
+         case Qt::Key_Down:
+         case Qt::Key_S:
+
+             if (direction != Direction::UP) {
                  direction = Direction::DOWN;
-                 break;
+             }
+             break;
          }
 
          return true;

@@ -37,7 +37,7 @@ private:
     /// \brief Very simple structure to hold 2D coordinates
     struct Coordinate {
         int x, y;
-        bool operator==(const Coordinate& other) {
+        bool operator==(const Coordinate& other) const {
             return (x == other.x) && (y == other.y);
         }
 
