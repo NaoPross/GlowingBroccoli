@@ -87,7 +87,10 @@ void Snake::moveSnake(Direction d) {
 
         if (head == food) {
 
-            food = {rand()%10, rand()%10};
+            do {
+                food = {rand()%10, rand()%10};
+            } while (snake.contains(food) == true);
+
         } else {
             snake.removeLast();
         }
