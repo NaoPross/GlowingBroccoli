@@ -1,0 +1,174 @@
+\documentclass[a4paper, twosided, 11pt]{scrartcl}
+
+%% Language configuration
+\usepackage{polyglossia}
+\setdefaultlanguage[variant=swiss]{german}
+
+%$ Specify where floatings go and make nicer looking tables
+\usepackage{float}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+%% Set up font
+\usepackage[T1]{fontenc}
+\usepackage[usefilenames, DefaultFeatures={Ligatures=Common}]{plex-otf}
+\renewcommand*\familydefault{\sfdefault}
+
+%% Header and Footers
+\usepackage[automark]{scrlayer-scrpage}
+\ihead{Projectplan}
+\chead{}
+\ohead{\headmark}
+
+\ifoot{}
+\cfoot{}
+\ofoot{\pagemark}
+
+%% Tikz to draw stuff
+\usepackage{tikz}
+\usepackage{tikzsymbols}
+\usetikzlibrary{automata, positioning, arrows, calc, shapes.geometric, fit}
+
+%% Access metadata
+\usepackage{titling}
+
+% Metadata
+\title{Projektplan}
+\author{Naoki Pross, Joanne Robertz, Steven Wegmann, J\'er\^ome Roy}
+
+% Document
+\begin{document}
+\begin{titlepage}
+  \includegraphics[height=3cm]{pic/ost-logo}
+  \begin{flushright}
+    % TODO: OST logo
+    \vspace{5cm}
+    {\Huge \bfseries \thetitle} \\
+    \vspace{5mm}
+    {\LARGE Project: \textit{GlowingBroccoli}} \\
+    \vspace{5mm}
+    {\LARGE \bfseries Version 2.3}
+  \end{flushright}
+\end{titlepage}
+
+
+\clearpage
+\section*{\"Anderungsgeschichte}
+\begin{tabularx}{\textwidth}{lrlX}
+  \toprule
+  \bfseries Datum & \bfseries Version & \bfseries Autor & \bfseries Beschreibung \\
+  \midrule
+  2020-10-05 & 1.0 & Wegmann S. & Dokument erstellt \\
+  2020-11-02 & 2.0 & Pross N.   & Dokument bearbeitet \\
+  2020-11-02 & 2.1 & Roy J.     & Dokument bearbeitet \\
+  2020-11-02 & 2.2 & Robertz J. & Dokument bearbeitet \\
+  2020-11-02 & 2.3 & Wegmann S. & Dokument bearbeitet \\
+  \bottomrule
+\end{tabularx}
+
+\vfill
+{
+  \renewcommand{\arraystretch}{2}
+  \begin{tabularx}{\textwidth}{lp{.2\textwidth}X}
+                   & \bfseries Datum & \bfseries Unterschrift \\
+    Pross Naoki    & \hrulefill & \hrulefill \\
+    Robertz Joanne & \hrulefill & \hrulefill \\
+    Roy J\'er\^ome & \hrulefill & \hrulefill \\
+    Wegmann Steven & \hrulefill & \hrulefill \\
+  \end{tabularx}
+}
+
+\clearpage
+\tableofcontents
+\listoffigures
+\listoftables
+
+\section{Team}
+
+Das Team besteht aus folgenden Studenten:
+\begin{itemize}
+  \item Naoki Pross
+  \item Joanne Robertz
+  \item J\'er\^ome Roy
+  \item Steven Wegmann
+\end{itemize}
+
+\section{Projektstrukturplan}
+
+\begin{figure}[H]
+  \centering
+  \input{tex/structure.tex}
+\end{figure}
+
+\section{Arbeitspakete}
+
+\begin{table}[H]
+\caption{Arbeitspakete}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{lX}
+  \toprule
+  \bfseries Allgemein & \bfseries Beschreibung \\
+  \midrule
+  Dokumentation & Dokumentation beinhaltet folgende Themen: Requirements
+  Specification (separates Dokument), Beschreibung alle Software und Hardware
+  APs und deren Resultat. Beinhaltet nicht: Benutzerhandbücher. \\
+
+  Systemkonzept & Erstellen der Systemarchitektur mit deren Komponenten und Schnittstellen. \\
+
+  Systemtest & Erstellen eines Systemtest welche alle User Anforderungen erfüllen. \\
+
+  \midrule
+
+  Architektur erstellen & Erstellen der Softwarearchitektur mit UML. \\
+
+  Schlange mit Qt zeichnen & Die Schlange wird auf ein Window gezeichnet. \\
+
+  Game Loop implementieren & Ein inkrementierender Timer aktualisiert die
+  Position der Schlange. \\
+
+  Steuerung hinzuf\"ugen & Der Spieler muss in der Lage sein, die Schlange mit
+  der Tastatur zu steuern. \\
+
+  Fr\"uchte & Auf der Karte wird zufällig ein Stück Nahrung generiert, das die
+  Schlange fressen kann. \\
+
+  Kollision der Objekte ermöglichen & Nach einer Kollision mit einer Frucht
+  oder sich selbst wird ein Event ausgeführt. \\
+
+  Game Over Status & Use Case Game Over gem\"ass SRS implementieren. \\
+
+  Menu Status & Use Case Menu gem\"ass SRS implementieren. \\
+
+  Spiel pausieren erm\"oglichen & Use Case Pause gem\"ass SRS implementieren. \\
+
+  Scoreboard einf\"ugen & Use Case Scoreboard gem\"ass SRS implementieren. \\
+
+  \bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Meilensteine}
+
+\subsection{Debug / Normale}
+
+\begin{enumerate}
+  \item Grafische Oberfl\"ache und leere Game Loop realisieren
+  \item Schlange bewegt sich und kann gesteuert werden
+  \item Collision Checking und Game Over sind implementiert
+  \item Score f\"ur ein Spiel wird gespeichert
+  \item Menu und Scoreboard sind implementiert
+  \item Spiel kann pausiert werden
+\end{enumerate}
+
+\subsection{Release}
+
+\begin{enumerate}
+  \item Spiel ist fertig und spielbar
+  \item Framerate und Update-Rate sind stabil
+\end{enumerate}
+
+\section{Terminplan}
+Siehe der Anhang \texttt{Gantt-Diagramm.pdf}.
+
+\end{document}
