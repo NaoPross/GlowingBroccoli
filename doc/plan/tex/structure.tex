@@ -1,0 +1,42 @@
+\begin{tikzpicture}[
+    node/.style = {
+      rectangle, draw, very thick, fill=gray!20,
+      inner sep = 10pt,
+      % rounded corners = 1mm,
+    },
+    leaf/.style = {
+      rectangle, draw = gray, very thick, fill=gray!20, anchor = west,
+      minimum width = 4cm, minimum height = 1cm,
+      rounded corners = 1mm,
+    },
+  ]
+
+  \node[node] (prj) {\bfseries Glowing Broccoli};
+
+  \node[node, below left = of prj.south west] (general) {Allgemein};
+  \node[leaf, below right = of general.south west] (gen0) {Dokumentation};
+  \node[leaf, below = of gen0] (gen1) {Systemkonzept};
+  \node[leaf, below = of gen1] (gen2) {Systemtest};
+
+  \foreach \i in {0, 1, 2} {
+    \draw[very thick] ($(general.south)+(-.6,0)$) |- (gen\i.west);
+  }
+
+  \node[node, below right = of prj.south east] (sw) {Software};
+  \node[leaf, below right = of sw.south west] (sw0) {Archikektur erstellen};
+  \node[leaf, below = of sw0] (sw1) {Schlange zeichnen};
+  \node[leaf, below = of sw1] (sw2) {Game Loop};
+  \node[leaf, below = of sw2] (sw3) {Steuerung};
+  \node[leaf, below = of sw3] (sw4) {Fr\"uchte};
+  \node[leaf, below = of sw4] (sw5) {Kollision};
+  \node[leaf, below = of sw5] (sw6) {Game Over};
+  \node[leaf, below = of sw6] (sw7) {Menu \& Scoreboard};
+
+  \foreach \i in {0, 1, 2, ..., 7} {
+    \draw[very thick] ($(sw.south)+(-.6,0)$) |- (sw\i.west);
+  }
+
+  \draw[very thick] (prj.west) to[in=90, out=180] (general.north);
+  \draw[very thick] (prj.east) to[in=90, out=0] (sw.north);
+
+\end{tikzpicture}
