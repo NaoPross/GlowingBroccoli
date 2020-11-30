@@ -65,11 +65,8 @@ private:
     /// \sa Snake::Direction
     void moveSnake(Direction d);
 
-    /// \brief Move the snake in a given direction
-    /// \param d the direction
-    /// \param howmany how many steps
-    /// \sa Snake::Direction
-    void moveSnake(Direction d, unsigned howmany);
+    /// \brief Generate a new piece of food at random place on the map
+    void generateFood();
 };
 
 #endif // SNAKE_H
