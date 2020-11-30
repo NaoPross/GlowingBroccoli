@@ -1,16 +1,32 @@
 #include "snake.h"
 #include <QDebug>
 #include <QRandomGenerator>
+#include <QGraphicsScene>
 
 Snake::Snake() {
+    // TODO: optimize: pause timers while on menu / scoreboard
     frameTimerId = startTimer(static_cast<int>(1000.0/fps));
     updateTimerId = startTimer(static_cast<int>(1000.0/ups));
+}
 
-    // TODO: generate randomly the first coordinate
-    // TODO: remove test code
+Snake::~Snake() {}
 
+void Snake::setGameState(Snake::GameState state) {
+    gameState = state;
+}
+
+void Snake::updateBoundingRect(const QRectF& rect) {
+    gameRect = rect;
+}
+
+QRectF Snake::boundingRect() const {
+    return gameRect;
+}
+
+void Snake::startNewGame() {
     Coordinate head = {
-        QRandomGenerator::global()->bounded(0,gridsize), QRandomGenerator::global()->bounded(0,gridsize)
+        QRandomGenerator::global()->bounded(0, gridsize),
+        QRandomGenerator::global()->bounded(0, gridsize)
     };
 
     direction = static_cast<Direction>(QRandomGenerator::global()->bounded(0,4));
@@ -35,16 +51,9 @@ Snake::Snake() {
         break;
     }
 
-    food = {
-        QRandomGenerator::global()->bounded(0,60), QRandomGenerator::global()->bounded(0,60)
-    };
-}
-
-Snake::~Snake() {}
-
-QRectF Snake::boundingRect() const {
-    return QRectF(0,0,800,800); //may need to be changed to dynamic size!
-}
+    generateFood();
+    gameState = GameState::PLAY;
+};
 
 void Snake::timerEvent(QTimerEvent *event) {
     int eventTimerId = event->timerId();
@@ -60,8 +69,11 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    // TODO: cache this value, make 100 a parameter
-    const int cellWidth = static_cast<int>(boundingRect().width() / static_cast<double>(gridsize));
+    // TODO: cache this value
+    const int cellWidth = static_cast<int>(gameRect.width() / static_cast<double>(gridsize));
+
+    // draw game background
+    painter->fillRect(gameRect, Qt::white);
 
     // draw snake
     painter->setBrush(Qt::red); // head color
@@ -76,6 +88,11 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 }
 
 void Snake::updateGame() {
+    if (gameState != GameState::PLAY) {
+        qDebug("not updating game!");
+        return;
+    }
+
     // TODO: collision checking
 
     // update snake
@@ -86,8 +103,6 @@ void Snake::moveSnake(Direction d) {
     // TODO: check if the position of the snake is outside of the bounding region
 
     Coordinate head = snake.first();
-
-
 
     switch (d) {
         case Direction::UP:  head.y -= 1;
@@ -100,33 +115,26 @@ void Snake::moveSnake(Direction d) {
             break;
     }
 
-    //...
     if (head != snake.at(1)) {
         snake.prepend(head);
-
-
         if (head == food) {
-
-            do {
-                food = {QRandomGenerator::global()->bounded(0,gridsize), QRandomGenerator::global()->bounded(0,gridsize)};
-            } while (snake.contains(food) == true);
-
+            generateFood();
         } else {
             snake.removeLast();
         }
-
-    }
-
-}
-
-void Snake::moveSnake(Direction d, unsigned howmany) {
-    while (howmany--) {
-        moveSnake(d);
     }
 }
 
-bool Snake::eventFilter(QObject *obj, QEvent *event) //function for key press
- {
+void Snake::generateFood() {
+    do {
+        food = {
+            QRandomGenerator::global()->bounded(0, gridsize),
+            QRandomGenerator::global()->bounded(0, gridsize)
+        };
+    } while (snake.contains(food) == true);
+}
+
+bool Snake::eventFilter(QObject *obj, QEvent *event) {
      if (event->type() == QEvent::KeyPress) {
          QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
 

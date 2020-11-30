@@ -10,11 +10,23 @@
 class Snake : public QGraphicsObject
 {
 public:
+    /// \brief Possible states of the game
+    enum class GameState : unsigned { PLAY, PAUSED, OVER, INVALID };
+
     Snake();
     virtual ~Snake();
 
     /// \sa QGrpahicsObject::boundingRect
     QRectF boundingRect() const override;
+
+public slots:
+    void setGameState(GameState s);
+    void updateBoundingRect(const QRectF& rect);
+    void startNewGame();
+
+signals:
+    void gameOver();
+    void gamePaused();
 
 protected:
     /// \sa QObject::timerEvent
@@ -46,11 +58,13 @@ private:
         }
     };
 
-
+    GameState gameState = GameState::PAUSED;
     QVector<Coordinate> snake;
     Direction direction;
     Coordinate food;
-    const int gridsize = 60;
+
+    const int gridsize = 30;
+    QRectF gameRect = QRectF(0, 0, 200, 200);
 
     /// \brief Update the game state
     void updateGame();
@@ -65,11 +79,8 @@ private:
     /// \sa Snake::Direction
     void moveSnake(Direction d);
 
-    /// \brief Move the snake in a given direction
-    /// \param d the direction
-    /// \param howmany how many steps
-    /// \sa Snake::Direction
-    void moveSnake(Direction d, unsigned howmany);
+    /// \brief Generate a new piece of food at random place on the map
+    void generateFood();
 };
 
 #endif // SNAKE_H
