@@ -1,11 +1,29 @@
 #include "snake.h"
 #include <QDebug>
 #include <QRandomGenerator>
+#include <QGraphicsScene>
 
 Snake::Snake() {
+    // TODO: optimize: pause timers while on menu / scoreboard
     frameTimerId = startTimer(static_cast<int>(1000.0/fps));
     updateTimerId = startTimer(static_cast<int>(1000.0/ups));
+}
 
+Snake::~Snake() {}
+
+void Snake::setGameState(Snake::GameState state) {
+    gameState = state;
+}
+
+void Snake::updateBoundingRect(const QRectF& rect) {
+    gameRect = rect;
+}
+
+QRectF Snake::boundingRect() const {
+    return gameRect;
+}
+
+void Snake::startNewGame() {
     Coordinate head = {
         QRandomGenerator::global()->bounded(0, gridsize),
         QRandomGenerator::global()->bounded(0, gridsize)
@@ -34,14 +52,8 @@ Snake::Snake() {
     }
 
     generateFood();
-}
-
-Snake::~Snake() {}
-
-QRectF Snake::boundingRect() const {
-    // TODO: change to make dynamic
-    return QRectF(0,0,800,800);
-}
+    gameState = GameState::PLAY;
+};
 
 void Snake::timerEvent(QTimerEvent *event) {
     int eventTimerId = event->timerId();
@@ -58,7 +70,10 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     Q_UNUSED(widget);
 
     // TODO: cache this value
-    const int cellWidth = static_cast<int>(boundingRect().width() / static_cast<double>(gridsize));
+    const int cellWidth = static_cast<int>(gameRect.width() / static_cast<double>(gridsize));
+
+    // draw game background
+    painter->fillRect(gameRect, Qt::white);
 
     // draw snake
     painter->setBrush(Qt::red); // head color
@@ -73,6 +88,11 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 }
 
 void Snake::updateGame() {
+    if (gameState != GameState::PLAY) {
+        qDebug("not updating game!");
+        return;
+    }
+
     // TODO: collision checking
 
     // update snake
