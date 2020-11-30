@@ -24,10 +24,17 @@ QRectF Snake::boundingRect() const {
 }
 
 void Snake::startNewGame() {
-    Coordinate head = {
-        QRandomGenerator::global()->bounded(0, gridsize),
-        QRandomGenerator::global()->bounded(0, gridsize)
-    };
+
+    Coordinate head;
+    // range to avoid spawning too close to the border
+    const int range = 5;
+    do {
+        head = {
+            QRandomGenerator::global()->bounded(0, gridsize),
+            QRandomGenerator::global()->bounded(0, gridsize)
+        };
+    } while (((head.x - range) > 0) && ((head.x + range) < gridsize)
+          && ((head.y - range) > 0) && ((head.y + range) < gridsize));
 
     direction = static_cast<Direction>(QRandomGenerator::global()->bounded(0,4));
 
@@ -89,6 +96,7 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
 void Snake::updateGame() {
     if (gameState != GameState::PLAY) {
+        // TODO: remove
         qDebug("not updating game!");
         return;
     }
