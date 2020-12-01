@@ -51,6 +51,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QLineEdit" name="playerNameEdit">
+          <property name="placeholderText">
+           <string>Enter your name</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="playBtn">
           <property name="text">
            <string>Play</string>
