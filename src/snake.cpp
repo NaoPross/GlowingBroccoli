@@ -3,15 +3,11 @@
 #include <QRandomGenerator>
 #include <QGraphicsScene>
 
-Snake::Snake() {
-    // TODO: optimize: pause timers while on menu / scoreboard
-    frameTimerId = startTimer(static_cast<int>(1000.0/fps));
-    updateTimerId = startTimer(static_cast<int>(1000.0/ups));
-}
+Snake::Snake() {}
 
 Snake::~Snake() {}
 
-void Snake::setGameState(Snake::GameState state) {
+void Snake::setGameState(GameState state) {
     gameState = state;
 }
 
@@ -24,6 +20,10 @@ QRectF Snake::boundingRect() const {
 }
 
 void Snake::startNewGame() {
+
+    connect(&timer, &QTimer::timeout, this, &Snake::updateGame);
+    timer.start(static_cast<int>(fps));
+
     Coordinate head = {
         QRandomGenerator::global()->bounded(0, gridsize),
         QRandomGenerator::global()->bounded(0, gridsize)
@@ -55,14 +55,9 @@ void Snake::startNewGame() {
     gameState = GameState::PLAY;
 };
 
-void Snake::timerEvent(QTimerEvent *event) {
-    int eventTimerId = event->timerId();
-    if (eventTimerId == frameTimerId) {
-        // update graphics (calls paint)
-        update();
-    } else if (eventTimerId == updateTimerId) {
-        updateGame();
-    }
+void Snake::gameOver() {
+    disconnect(&timer, &QTimer::timeout, this, &Snake::updateGame);
+    //TODO: gameOver Behaviour
 }
 
 void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
@@ -88,21 +83,29 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 }
 
 void Snake::updateGame() {
+    //redraw graphics
+    update();
+
     if (gameState != GameState::PLAY) {
         qDebug("not updating game!");
         return;
     }
 
-    // TODO: collision checking
+    if(snake.count(snake.first())>1) {
+        QTimer::singleShot(0, this, &Snake::gameOver);
+    }
 
     // update snake
     moveSnake(direction);
 }
 
 void Snake::moveSnake(Direction d) {
-    // TODO: check if the position of the snake is outside of the bounding region
 
     Coordinate head = snake.first();
+
+    if((head.x > gridsize) || (head.x < 0) || (head.y > gridsize) || (head.y < 0)) {
+        QTimer::singleShot(0, this, &Snake::gameOver);
+    }
 
     switch (d) {
         case Direction::UP:  head.y -= 1;
@@ -131,7 +134,7 @@ void Snake::generateFood() {
             QRandomGenerator::global()->bounded(0, gridsize),
             QRandomGenerator::global()->bounded(0, gridsize)
         };
-    } while (snake.contains(food) == true);
+    } while (snake.contains(food));
 }
 
 bool Snake::eventFilter(QObject *obj, QEvent *event) {
