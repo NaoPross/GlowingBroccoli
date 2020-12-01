@@ -3,12 +3,24 @@
 
 #include <QBrush>
 #include <QPushButton>
+#include <QFontDatabase>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    /* load custom font */
+    int id = QFontDatabase::addApplicationFont(":/res/fonts/unscii-16.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont unscii_font(family);
+
+    unscii_font.setBold(true);
+    unscii_font.setPointSize(50);
+
+    // set title font
+    ui->titleLabel->setFont(unscii_font);
 
     /* game */
 

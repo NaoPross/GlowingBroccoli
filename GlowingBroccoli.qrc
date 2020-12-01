@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/fonts/unscii-16.ttf</file>
+    </qresource>
+</RCC>
