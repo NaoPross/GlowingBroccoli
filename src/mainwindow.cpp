@@ -3,6 +3,7 @@
 
 #include <QBrush>
 #include <QPushButton>
+#include <QLineEdit>
 #include <QFontDatabase>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -39,20 +40,23 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* menu */
 
+    ui->playBtn->setEnabled(false);
+    connect(ui->playerNameEdit, &QLineEdit::textChanged, this, [=]() {
+        ui->playBtn->setEnabled(!ui->playerNameEdit->text().isEmpty());
+    });
+
     // play button
     connect(ui->playBtn, &QPushButton::clicked, snake, [=]() {
         loadPage(MainWindow::Page::GAME);
         resizeGameToView();
-        snake->startNewGame();
+        snake->startNewGame(ui->playerNameEdit->text());
     });
 
     // exit button closes the window
-    connect(ui->exitBtn, &QPushButton::clicked, snake, [=]() {
-        close();
-    });
+    connect(ui->exitBtn, &QPushButton::clicked, this, &QMainWindow::close);
 
     /* scoreboard */
-    // TODO
+    connect(snake, &Snake::gameOver, this, &MainWindow::addScore);
 }
 
 MainWindow::~MainWindow()
@@ -66,6 +70,10 @@ void MainWindow::loadPage(MainWindow::Page p) {
     ui->stackedWidget->setCurrentIndex(static_cast<int>(p));
 }
 
+void MainWindow::addScore(Snake::Score s) {
+    scoreboard.append(s);
+}
+
 void MainWindow::resizeEvent(QResizeEvent *event) {
     QMainWindow::resizeEvent(event);
     resizeGameToView();
@@ -76,8 +84,10 @@ void MainWindow::resizeGameToView() {
     float min = (newSize.width() > newSize.height()) ? newSize.height() : newSize.width();
     QRectF newRect(0, 0, min, min);
 
+    Snake::GameState state = snake->gameState();
+
     snake->setGameState(Snake::GameState::INVALID);
     snake->updateBoundingRect(newRect);
     ui->graphicsView->setSceneRect(newRect);
-    snake->setGameState(Snake::GameState::PLAY);
+    snake->setGameState(state);
 }

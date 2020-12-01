@@ -9,7 +9,14 @@
 /// \brief Graphic object that draws the game of Snake
 class Snake : public QGraphicsObject
 {
+    Q_OBJECT
+
 public:
+    struct Score {
+        QString player;
+        int value;
+    };
+
     /// \brief Possible states of the game
     enum class GameState : unsigned { PLAY, PAUSED, OVER, INVALID };
 
@@ -17,16 +24,18 @@ public:
     virtual ~Snake();
 
     /// \sa QGrpahicsObject::boundingRect
-    QRectF boundingRect() const override;
+    QRectF boundingRect() const override { return m_gameRect; }
+    GameState gameState() const { return m_gameState; }
 
 public slots:
     void setGameState(GameState s);
     void updateBoundingRect(const QRectF& rect);
-    void startNewGame();
+    void startNewGame(QString playerName);
 
 signals:
-    void gameOver();
+    void gameOver(Score);
     void gamePaused();
+    void gameResumed();
 
 protected:
     /// \sa QObject::timerEvent
@@ -39,9 +48,9 @@ protected:
 
 private:
     /// \brief Framerate of the game
-    const unsigned fps = 60;
+    const unsigned m_fps = 60;
     /// \brief Update rate of the game
-    const unsigned ups = 15;
+    const unsigned m_ups = 15;
 
     /// \brief Directions in which Snake can move
     enum class Direction : unsigned { UP, DOWN, LEFT, RIGHT };
@@ -58,21 +67,22 @@ private:
         }
     };
 
-    GameState gameState = GameState::PAUSED;
-    QVector<Coordinate> snake;
-    Direction direction;
-    Coordinate food;
+    GameState m_gameState = GameState::INVALID;
+    QVector<Coordinate> m_snake;
+    Direction m_direction;
+    Coordinate m_food;
+    Score m_score;
 
-    const int gridsize = 30;
-    QRectF gameRect = QRectF(0, 0, 200, 200);
+    const int m_gridsize = 30;
+    QRectF m_gameRect = QRectF(0, 0, 200, 200);
 
     /// \brief Update the game state
     void updateGame();
 
     /// Timer id for frame update
-    int frameTimerId = -1;
+    int m_frameTimerId = -1;
     /// Timer id for game update
-    int updateTimerId = -1;
+    int m_updateTimerId = -1;
 
     /// \brief Move the snake by 1 in a given direction
     /// \param d the Direction
