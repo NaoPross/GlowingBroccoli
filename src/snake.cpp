@@ -3,15 +3,11 @@
 #include <QRandomGenerator>
 #include <QGraphicsScene>
 
-Snake::Snake() {
-    // TODO: optimize: pause timers while on menu / scoreboard
-    m_frameTimerId = startTimer(static_cast<int>(1000.0/m_fps));
-    m_updateTimerId = startTimer(static_cast<int>(1000.0/m_ups));
-}
+Snake::Snake() {}
 
 Snake::~Snake() {}
 
-void Snake::setGameState(Snake::GameState state) {
+void Snake::setGameState(GameState state) {
     m_gameState = state;
 }
 
@@ -25,6 +21,10 @@ void Snake::startNewGame(QString playerName) {
     /* reset score */
     m_score.player = playerName;
     m_score.value = 0;
+
+    /* start new timer */
+    connect(&m_timer, &QTimer::timeout, this, &Snake::updateGame);
+    m_timer.start(static_cast<int>(1000.0/m_fps));
 
     /* create a new snake */
 
@@ -72,15 +72,10 @@ void Snake::startNewGame(QString playerName) {
     m_gameState = GameState::PLAY;
 };
 
-void Snake::timerEvent(QTimerEvent *event) {
-    int eventTimerId = event->timerId();
-    if (eventTimerId == m_frameTimerId) {
-        // update graphics (calls paint)
-        update();
-    } else if (eventTimerId == m_updateTimerId) {
-        updateGame();
-    }
-}
+// void Snake::gameOver(Snake::Score) {
+//     disconnect(&m_timer, &QTimer::timeout, this, &Snake::updateGame);
+//     //TODO: gameOver Behaviour
+// }
 
 void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     Q_UNUSED(option);
@@ -105,6 +100,9 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 }
 
 void Snake::updateGame() {
+    // render graphics
+    update();
+
     // TODO: convert to switch?
     if (m_gameState == GameState::INVALID) {
         return;
@@ -123,6 +121,14 @@ void Snake::updateGame() {
 
     Q_ASSERT(m_gameState == GameState::PLAY);
 
+    // TODO: what does this if actually do?
+    if(m_snake.count(m_snake.first())>1) {
+        // FIXME
+        // QTimer::singleShot(0, this, &Snake::gameOver);
+        m_gameState = GameState::OVER;
+        return;
+    }
+
     // TODO: collision checking
 
     // update snake
@@ -131,12 +137,21 @@ void Snake::updateGame() {
     // condition to end the game
     if (m_snake.length() >= (m_gridsize * m_gridsize - 1)) {
         m_gameState = GameState::OVER;
+        return;
     }
 }
 
 void Snake::moveSnake(Direction d) {
     // TODO: check if the position of the snake is outside of the bounding region
     Coordinate head = m_snake.first();
+
+    // TODO: move into updateGame()
+    if((head.x > m_gridsize) || (head.x < 0) || (head.y > m_gridsize) || (head.y < 0)) {
+        // FIXME
+        // QTimer::singleShot(0, this, &Snake::gameOver);
+        m_gameState = GameState::OVER;
+        return;
+    }
 
     switch (d) {
         case Direction::UP:  head.y -= 1;
@@ -167,7 +182,7 @@ void Snake::generateFood() {
             QRandomGenerator::global()->bounded(0, m_gridsize),
             QRandomGenerator::global()->bounded(0, m_gridsize)
         };
-    } while (m_snake.contains(m_food) == true);
+    } while (m_snake.contains(m_food));
 }
 
 bool Snake::eventFilter(QObject *obj, QEvent *event) {

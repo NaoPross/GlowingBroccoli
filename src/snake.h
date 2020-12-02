@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QVector>
+#include <QTimer>
 
 /// \brief Graphic object that draws the game of Snake
 class Snake : public QGraphicsObject
@@ -32,14 +33,15 @@ public slots:
     void updateBoundingRect(const QRectF& rect);
     void startNewGame(QString playerName);
 
+    /// \brief Update the game state
+    void updateGame();
+
 signals:
     void gameOver(Score);
     void gamePaused();
     void gameResumed();
 
 protected:
-    /// \sa QObject::timerEvent
-    void timerEvent(QTimerEvent *event) override;
 
     /// \sa QGraphicsObject::paint
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
@@ -48,10 +50,9 @@ protected:
 
 private:
     /// \brief Framerate of the game
-    const unsigned m_fps = 60;
-    /// \brief Update rate of the game
-    const unsigned m_ups = 15;
-
+    const unsigned m_fps = 12;
+    /// \brief Timer to advance the game
+    QTimer m_timer;
     /// \brief Directions in which Snake can move
     enum class Direction : unsigned { UP, DOWN, LEFT, RIGHT };
 
@@ -75,14 +76,6 @@ private:
 
     const int m_gridsize = 30;
     QRectF m_gameRect = QRectF(0, 0, 200, 200);
-
-    /// \brief Update the game state
-    void updateGame();
-
-    /// Timer id for frame update
-    int m_frameTimerId = -1;
-    /// Timer id for game update
-    int m_updateTimerId = -1;
 
     /// \brief Move the snake by 1 in a given direction
     /// \param d the Direction
