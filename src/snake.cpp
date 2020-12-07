@@ -8,6 +8,20 @@ Snake::Snake() {}
 Snake::~Snake() {}
 
 void Snake::setGameState(GameState state) {
+    switch (state) {
+    case GameState::PLAY:
+        emit gameResumed();
+        break;
+    case GameState::PAUSED:
+        emit gamePaused();
+        break;
+    case GameState::OVER:
+        emit gameOver(m_score);
+        break;
+    case GameState::INVALID:
+        // nothing special happens here
+        break;
+    }
     m_gameState = state;
 }
 
@@ -16,7 +30,7 @@ void Snake::updateBoundingRect(const QRectF& rect) {
 }
 
 void Snake::startNewGame(QString playerName) {
-    m_gameState = GameState::INVALID;
+    setGameState(GameState::INVALID);
 
     /* reset score */
     m_score.player = playerName;
@@ -69,7 +83,7 @@ void Snake::startNewGame(QString playerName) {
     generateFood();
 
     Q_ASSERT(!m_snake.isEmpty());
-    m_gameState = GameState::PLAY;
+    setGameState(GameState::PLAY);
 };
 
 // void Snake::gameOver(Snake::Score) {
@@ -115,7 +129,7 @@ void Snake::updateGame() {
 
     if (m_gameState == GameState::OVER) {
         // TODO: a special screen / something?
-        emit gameOver(m_score);
+        setGameState(GameState::OVER);
         return;
     }
 
@@ -125,7 +139,7 @@ void Snake::updateGame() {
     if(m_snake.count(m_snake.first())>1) {
         // FIXME
         // QTimer::singleShot(0, this, &Snake::gameOver);
-        m_gameState = GameState::OVER;
+        setGameState(GameState::OVER);
         return;
     }
 
@@ -136,7 +150,7 @@ void Snake::updateGame() {
 
     // condition to end the game
     if (m_snake.length() >= (m_gridsize * m_gridsize - 1)) {
-        m_gameState = GameState::OVER;
+        setGameState(GameState::OVER);
         return;
     }
 }
@@ -149,7 +163,7 @@ void Snake::moveSnake(Direction d) {
     if((head.x > m_gridsize) || (head.x < 0) || (head.y > m_gridsize) || (head.y < 0)) {
         // FIXME
         // QTimer::singleShot(0, this, &Snake::gameOver);
-        m_gameState = GameState::OVER;
+        setGameState(GameState::OVER);
         return;
     }
 
@@ -216,9 +230,9 @@ bool Snake::eventFilter(QObject *obj, QEvent *event) {
 
          case Qt::Key_Escape:
              if (m_gameState == GameState::PAUSED)
-                 m_gameState = GameState::PLAY;
+                 setGameState(GameState::PLAY);
              else if (m_gameState == GameState::PLAY)
-                 m_gameState = GameState::PAUSED;
+                 setGameState(GameState::PAUSED);
              break;
          }
 
