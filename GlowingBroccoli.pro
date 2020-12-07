@@ -15,3 +15,6 @@ HEADERS += src/mainwindow.h \
 FORMS   += src/mainwindow.ui
 SOURCES += src/main.cpp src/mainwindow.cpp \
     src/snake.cpp
+
+RESOURCES += \
+    GlowingBroccoli.qrc

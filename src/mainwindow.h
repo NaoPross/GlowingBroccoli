@@ -25,6 +25,7 @@ public:
 
 public slots:
     void loadPage(Page p);
+    void addScore(Snake::Score s);
 
 protected:
     virtual void resizeEvent(QResizeEvent *event) override;
@@ -34,7 +35,12 @@ private:
     QGraphicsScene *scene;
     Snake *snake;
 
+    QVector<Snake::Score> scoreboard;
+
     void resizeGameToView();
+
+    bool loadScoreboard();
+    bool writeScoreboard();
 };
 
 
