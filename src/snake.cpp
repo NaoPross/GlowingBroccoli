@@ -2,8 +2,15 @@
 #include <QDebug>
 #include <QRandomGenerator>
 #include <QGraphicsScene>
+#include <QFont>
+#include <QFontDatabase>
 
-Snake::Snake() {}
+Snake::Snake() {
+    // TODO(improvement) the font is already loaded in MainWindow, this load could be avoided
+    int id = QFontDatabase::addApplicationFont(":/res/fonts/unscii-16.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    m_font = QFont(family);
+}
 
 Snake::~Snake() {}
 
@@ -111,6 +118,23 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     // draw food
     painter->setBrush(Qt::yellow); //food color
     painter->drawRect(m_food.x * cellWidth, m_food.y  * cellWidth, cellWidth, cellWidth);
+
+    // draw score
+    m_font.setPixelSize(cellWidth *2); // same as below
+    painter->setFont(m_font);
+
+    // TODO(improvement): move the score when the snake and/or food is under it
+    Coordinate scorePos = {1, 1};
+    const QRect scoreRect = QRect(
+        scorePos.x * cellWidth, scorePos.y * cellWidth,
+        cellWidth * 6, cellWidth * 2);
+
+    painter->drawText(
+        scoreRect,
+        Qt::AlignCenter,
+        QString("%1").arg(m_score.value, 6, 10, QLatin1Char('0'))
+    );
+
 }
 
 void Snake::updateGame() {

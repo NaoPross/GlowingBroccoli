@@ -77,6 +77,8 @@ protected:
 private:
     /// \brief Framerate of the game
     const unsigned m_fps = 12;
+    /// \brief Font used by the painter
+    QFont m_font;
     /// \brief Timer to advance the game
     QTimer m_timer;
     /// \brief Directions in which Snake can move
