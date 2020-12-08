@@ -10,6 +10,11 @@
 
 /// \brief Graphic object that draws the game of Snake
 ///
+/// The Snake class implements the *entire* game of snake. The rationale is to
+/// keep the code simple.  Separation of graphical entities into separate object
+/// types is premature optimization for a future extension that will not come.
+/// Snake is a *very* simple game.
+///
 /// Usually QGraphicsObjects are not Q_OBJECTS by default for performance
 /// reasons. In this case though performance is not a requirement, and being
 /// able to use signals allows for a better integration with external widgets
