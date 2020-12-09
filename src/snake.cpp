@@ -140,56 +140,33 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 void Snake::updateGame() {
     // render graphics
     update();
-
-    // TODO: convert to switch?
-    if (m_gameState == GameState::INVALID) {
-        return;
-    }
-
-    if (m_gameState == GameState::PAUSED) {
-        // wait
-        return;
-    }
-
-    if (m_gameState == GameState::OVER) {
-        // TODO: a special screen / something?
-        disconnect(&m_timer, &QTimer::timeout, this, &Snake::updateGame);
-        return;
-    }
-
     Q_ASSERT(m_gameState == GameState::PLAY);
 
-    // TODO: what does this if actually do?
-    if(m_snake.count(m_snake.first())>1) {
-        // FIXME
-        // QTimer::singleShot(0, this, &Snake::gameOver);
+    // when the snake eats itself
+    if(m_snake.count(m_snake.first()) > 1) {
         setGameState(GameState::OVER);
         return;
     }
 
-    // TODO: collision checking
+    // when a border is hit
+    Coordinate head = m_snake.first();
+    if((head.x > m_gridsize) || (head.x < 0) || (head.y > m_gridsize) || (head.y < 0)) {
+        setGameState(GameState::OVER);
+        return;
+    }
 
-    // update snake
-    moveSnake(m_direction);
-
-    // condition to end the game
+    // when the snake is long enough to fill the entire map
     if (m_snake.length() >= (m_gridsize * m_gridsize - 1)) {
         setGameState(GameState::OVER);
         return;
     }
+
+    // update snake
+    moveSnake(m_direction);
 }
 
 void Snake::moveSnake(Direction d) {
-    // TODO: check if the position of the snake is outside of the bounding region
     Coordinate head = m_snake.first();
-
-    // TODO: move into updateGame()
-    if((head.x > m_gridsize) || (head.x < 0) || (head.y > m_gridsize) || (head.y < 0)) {
-        // FIXME
-        // QTimer::singleShot(0, this, &Snake::gameOver);
-        setGameState(GameState::OVER);
-        return;
-    }
 
     switch (d) {
         case Direction::UP:  head.y -= 1;
