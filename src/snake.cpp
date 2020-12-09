@@ -14,19 +14,26 @@ Snake::~Snake() {}
 void Snake::setGameState(GameState state) {
     switch (state) {
     case GameState::PLAY:
-        emit gameResumed();
         m_timer.start(static_cast<int>(1000.0/m_fps));
+        qDebug("GameState::PLAY");
+        emit gameResumed();
         break;
     case GameState::PAUSED:
+        if (m_timer.isActive())
+            m_timer.stop();
+        qDebug("GameState::PLAY");
         emit gamePaused();
-        m_timer.stop();
         break;
     case GameState::OVER:
+        if (m_timer.isActive())
+            m_timer.stop();
+        qDebug("GameState::OVER");
         emit gameOver(m_score);
-        m_timer.stop();
         break;
     case GameState::INVALID:
-        m_timer.stop();
+        qDebug("GameState::INVALID");
+        if (m_timer.isActive())
+            m_timer.stop();
         break;
     }
     m_gameState = state;
@@ -82,17 +89,13 @@ void Snake::startNewGame(QString playerName) {
         break;
     }
 
-    /* set up the rest */
+    /* create food */
     generateFood();
 
+    /* start game */
     Q_ASSERT(!m_snake.isEmpty());
     setGameState(GameState::PLAY);
 };
-
-// void Snake::gameOver(Snake::Score) {
-//     disconnect(&m_timer, &QTimer::timeout, this, &Snake::updateGame);
-//     //TODO: gameOver Behaviour
-// }
 
 void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     Q_UNUSED(option);
@@ -116,14 +119,15 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     painter->drawRect(m_food.x * cellWidth, m_food.y  * cellWidth, cellWidth, cellWidth);
 
     // draw score
-    m_font.setPixelSize(cellWidth *2); // same as below
+    const int textHeight = cellWidth * 2;
+    m_font.setPixelSize(textHeight); // same as below
     painter->setFont(m_font);
 
     // TODO(improvement): move the score when the snake and/or food is under it
     Coordinate scorePos = {1, 1};
     const QRect scoreRect = QRect(
         scorePos.x * cellWidth, scorePos.y * cellWidth,
-        cellWidth * 6, cellWidth * 2);
+        cellWidth * 6, textHeight);
 
     painter->drawText(
         scoreRect,
@@ -178,7 +182,6 @@ void Snake::moveSnake(Direction d) {
     if (head != m_snake.at(1)) {
         m_snake.prepend(head);
         if (head == m_food) {
-            // TODO: make it a member or constant
             m_score.value += 100;
             generateFood();
         } else {

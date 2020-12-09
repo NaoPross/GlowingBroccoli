@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* menu */
 
+    // game can be player only when a name is set
     ui->playBtn->setEnabled(false);
     connect(ui->playerNameEdit, &QLineEdit::textChanged, this, [=]() {
         ui->playBtn->setEnabled(!ui->playerNameEdit->text().isEmpty());
@@ -48,8 +49,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     // play button
     connect(ui->playBtn, &QPushButton::clicked, [=]() {
+        // FIXME: the page is loaded twice because resizeGameToView uses
+        // Snake::setGameState() which emits signals that in some edge cases
+        // cause the page to be changed. This is workaround to temporarely fix
+        // the problem.
         loadPage(MainWindow::Page::GAME);
         resizeGameToView();
+
+        loadPage(MainWindow::Page::GAME);
         snake->startNewGame(ui->playerNameEdit->text());
     });
 
@@ -62,11 +69,17 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->exitBtn, &QPushButton::clicked, this, &QMainWindow::close);
 
     /* scoreboard */
+    // TODO: improve sorting: should be with the score (this is probably lexicographical)
+    ui->scoreboardListWidget->setSortingEnabled(true);
+
+    // gameOver signal from the game shows the scoreboard
     connect(snake, &Snake::gameOver, [=](Snake::Score s) {
+        snake->setGameState(Snake::GameState::INVALID);
         addScore(s);
         loadPage(MainWindow::Page::SCOREBOARD);
     });
 
+    // return to menu from scoreboard
     connect(ui->backToMenuBtn, &QPushButton::clicked, [=]() {
         loadPage(MainWindow::Page::MENU);
     });
@@ -80,6 +93,10 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::loadPage(MainWindow::Page p) {
+    Q_ASSERT(ui->stackedWidget->widget(static_cast<int>(MainWindow::Page::MENU)) == ui->menuPage);
+    Q_ASSERT(ui->stackedWidget->widget(static_cast<int>(MainWindow::Page::GAME)) == ui->gamePage);
+    Q_ASSERT(ui->stackedWidget->widget(static_cast<int>(MainWindow::Page::SCOREBOARD)) == ui->scoreboardPage);
+
     ui->stackedWidget->setCurrentIndex(static_cast<int>(p));
 }
 
