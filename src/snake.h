@@ -10,6 +10,11 @@
 
 /// \brief Graphic object that draws the game of Snake
 ///
+/// The Snake class implements the *entire* game of snake. The rationale is to
+/// keep the code simple.  Separation of graphical entities into separate object
+/// types is premature optimization for a future extension that will not come.
+/// Snake is a *very* simple game.
+///
 /// Usually QGraphicsObjects are not Q_OBJECTS by default for performance
 /// reasons. In this case though performance is not a requirement, and being
 /// able to use signals allows for a better integration with external widgets
@@ -72,6 +77,8 @@ protected:
 private:
     /// \brief Framerate of the game
     const unsigned m_fps = 12;
+    /// \brief Font used by the painter
+    QFont m_font;
     /// \brief Timer to advance the game
     QTimer m_timer;
     /// \brief Directions in which Snake can move
