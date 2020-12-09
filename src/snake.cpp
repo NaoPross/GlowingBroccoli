@@ -3,14 +3,9 @@
 #include <QRandomGenerator>
 #include <QGraphicsScene>
 #include <QFont>
-#include <QFontDatabase>
 
-Snake::Snake() {
-    // TODO(improvement) the font is already loaded in MainWindow, this load could be avoided
-    int id = QFontDatabase::addApplicationFont(":/res/fonts/unscii-16.ttf");
-    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    m_font = QFont(family);
-
+Snake::Snake() : m_font("monospace") {
+    m_font.setStyleHint(QFont::Monospace);
     connect(&m_timer, &QTimer::timeout, this, &Snake::updateGame);
 }
 

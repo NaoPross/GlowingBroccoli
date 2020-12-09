@@ -42,6 +42,14 @@ public:
     /// \brief Getter for the game state
     GameState gameState() const { return m_gameState; }
 
+    /// \brief Set font used to draw text in the game (setter)
+    /// \param font Font to use
+    ///
+    /// This is needed to avoid loading font(s) from qrc in this class
+    /// because otherwise the test suite (for snake) does not embed the font
+    /// in the executable and crashes.
+    void setFont(QFont font) { m_font = font; }
+
 public slots:
     /// \brief Changes the internal state of the game (setter)
     /// \param s New state

@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     // ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     snake = new Snake;
+    snake->setFont(unscii_font);
+
     scene->addItem(snake);
     scene->installEventFilter(snake);
 
