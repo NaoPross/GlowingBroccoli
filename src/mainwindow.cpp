@@ -46,10 +46,15 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     // play button
-    connect(ui->playBtn, &QPushButton::clicked, snake, [=]() {
+    connect(ui->playBtn, &QPushButton::clicked, [=]() {
         loadPage(MainWindow::Page::GAME);
         resizeGameToView();
         snake->startNewGame(ui->playerNameEdit->text());
+    });
+
+    // scoreboard button
+    connect(ui->scoreboardBtn, &QPushButton::clicked, [=]() {
+        loadPage(MainWindow::Page::SCOREBOARD);
     });
 
     // exit button closes the window
@@ -57,6 +62,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* scoreboard */
     connect(snake, &Snake::gameOver, this, &MainWindow::addScore);
+    connect(ui->backToMenuBtn, &QPushButton::clicked, [=]() {
+        loadPage(MainWindow::Page::MENU);
+    });
 }
 
 MainWindow::~MainWindow()
