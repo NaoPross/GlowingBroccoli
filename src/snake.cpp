@@ -204,6 +204,19 @@ bool Snake::eventFilter(QObject *obj, QEvent *event) {
      if (event->type() == QEvent::KeyPress) {
          QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
 
+         if (keyEvent->key() == Qt::Key_Escape) {
+             if (m_gameState == GameState::PAUSED)
+                 setGameState(GameState::PLAY);
+             else if (m_gameState == GameState::PLAY)
+                 setGameState(GameState::PAUSED);
+
+             return true;
+         }
+
+         if (m_gameState != GameState::PLAY) {
+             return true;
+         }
+
          switch(keyEvent->key()) {
          case Qt::Key_Right:
          case Qt::Key_D:
@@ -227,13 +240,6 @@ bool Snake::eventFilter(QObject *obj, QEvent *event) {
          case Qt::Key_S:
              if (m_direction != Direction::UP)
                  m_direction = Direction::DOWN;
-             break;
-
-         case Qt::Key_Escape:
-             if (m_gameState == GameState::PAUSED)
-                 setGameState(GameState::PLAY);
-             else if (m_gameState == GameState::PLAY)
-                 setGameState(GameState::PAUSED);
              break;
          }
 
