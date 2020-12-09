@@ -116,7 +116,11 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     }
 
     // draw food
-    painter->setBrush(Qt::yellow); //food color
+    if (m_sfood == 10) {
+        painter->setBrush(Qt::magenta); //food color
+    } else {
+        painter->setBrush(Qt::yellow); //food color
+    }
     painter->drawRect(m_food.x * cellWidth, m_food.y  * cellWidth, cellWidth, cellWidth);
 
     // draw score
@@ -205,8 +209,11 @@ void Snake::moveSnake(Direction d) {
     if (head != m_snake.at(1)) {
         m_snake.prepend(head);
         if (head == m_food) {
-            // TODO: make it a member or constant
-            m_score.value += 100;
+            if (m_sfood == 10) {
+                m_score.value += 300;
+            } else {
+                m_score.value += 100;
+            }
             generateFood();
         } else {
             m_snake.removeLast();
@@ -215,6 +222,8 @@ void Snake::moveSnake(Direction d) {
 }
 
 void Snake::generateFood() {
+    m_sfood = QRandomGenerator::global()->bounded(0, 20);
+
     do {
         m_food = {
             QRandomGenerator::global()->bounded(0, m_gridsize),

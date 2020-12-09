@@ -104,6 +104,8 @@ private:
     Direction m_direction;
     /// \brief Coordinate of the next piece of food on the map
     Coordinate m_food;
+    /// \brief Special food counter
+    int m_sfood;
     /// \brief Current score of the player
     Score m_score;
 
