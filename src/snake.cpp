@@ -10,6 +10,8 @@ Snake::Snake() {
     int id = QFontDatabase::addApplicationFont(":/res/fonts/unscii-16.ttf");
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
     m_font = QFont(family);
+
+    connect(&m_timer, &QTimer::timeout, this, &Snake::updateGame);
 }
 
 Snake::~Snake() {}
@@ -18,15 +20,18 @@ void Snake::setGameState(GameState state) {
     switch (state) {
     case GameState::PLAY:
         emit gameResumed();
+        m_timer.start(static_cast<int>(1000.0/m_fps));
         break;
     case GameState::PAUSED:
         emit gamePaused();
+        m_timer.stop();
         break;
     case GameState::OVER:
         emit gameOver(m_score);
+        m_timer.stop();
         break;
     case GameState::INVALID:
-        // nothing special happens here
+        m_timer.stop();
         break;
     }
     m_gameState = state;
@@ -42,10 +47,6 @@ void Snake::startNewGame(QString playerName) {
     /* reset score */
     m_score.player = playerName;
     m_score.value = 0;
-
-    /* start new timer */
-    connect(&m_timer, &QTimer::timeout, this, &Snake::updateGame);
-    m_timer.start(static_cast<int>(1000.0/m_fps));
 
     /* create a new snake */
 
