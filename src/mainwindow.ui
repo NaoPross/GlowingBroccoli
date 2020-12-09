@@ -108,7 +108,20 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="scoreboardPage"/>
+      <widget class="QWidget" name="scoreboardPage">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QListWidget" name="scoreboardListWidget"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="backToMenuBtn">
+          <property name="text">
+           <string>Back to Menu</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>

@@ -10,6 +10,11 @@
 
 /// \brief Graphic object that draws the game of Snake
 ///
+/// The Snake class implements the *entire* game of snake. The rationale is to
+/// keep the code simple.  Separation of graphical entities into separate object
+/// types is premature optimization for a future extension that will not come.
+/// Snake is a *very* simple game.
+///
 /// Usually QGraphicsObjects are not Q_OBJECTS by default for performance
 /// reasons. In this case though performance is not a requirement, and being
 /// able to use signals allows for a better integration with external widgets
@@ -36,6 +41,14 @@ public:
 
     /// \brief Getter for the game state
     GameState gameState() const { return m_gameState; }
+
+    /// \brief Set font used to draw text in the game (setter)
+    /// \param font Font to use
+    ///
+    /// This is needed to avoid loading font(s) from qrc in this class
+    /// because otherwise the test suite (for snake) does not embed the font
+    /// in the executable and crashes.
+    void setFont(QFont font) { m_font = font; }
 
 public slots:
     /// \brief Changes the internal state of the game (setter)
@@ -72,6 +85,8 @@ protected:
 private:
     /// \brief Framerate of the game
     const unsigned m_fps = 12;
+    /// \brief Font used by the painter
+    QFont m_font;
     /// \brief Timer to advance the game
     QTimer m_timer;
     /// \brief Directions in which Snake can move
