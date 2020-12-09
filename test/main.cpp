@@ -1,4 +1,4 @@
-#include "tst_gamestate.h"
+#include "tst_gameplay.h"
 
 #include <gtest/gtest.h>
 
