@@ -153,7 +153,7 @@ void Snake::updateGame() {
 
     if (m_gameState == GameState::OVER) {
         // TODO: a special screen / something?
-        setGameState(GameState::OVER);
+        disconnect(&m_timer, &QTimer::timeout, this, &Snake::updateGame);
         return;
     }
 

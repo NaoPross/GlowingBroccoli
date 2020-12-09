@@ -15,8 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     /* load custom font */
     int id = QFontDatabase::addApplicationFont(":/res/fonts/unscii-16.ttf");
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    QFont unscii_font(family);
-
+    unscii_font = QFont(family);
     unscii_font.setBold(true);
     unscii_font.setPointSize(50);
 
@@ -61,7 +60,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->exitBtn, &QPushButton::clicked, this, &QMainWindow::close);
 
     /* scoreboard */
-    connect(snake, &Snake::gameOver, this, &MainWindow::addScore);
+    connect(snake, &Snake::gameOver, [=](Snake::Score s) {
+        addScore(s);
+        loadPage(MainWindow::Page::SCOREBOARD);
+    });
+
     connect(ui->backToMenuBtn, &QPushButton::clicked, [=]() {
         loadPage(MainWindow::Page::MENU);
     });
@@ -79,7 +82,10 @@ void MainWindow::loadPage(MainWindow::Page p) {
 }
 
 void MainWindow::addScore(Snake::Score s) {
-    scoreboard.append(s);
+    QString score = QString("%1 - ").arg(s.value, 6, 10, QLatin1Char('0'));
+    QListWidgetItem *item = new QListWidgetItem(score + s.player, ui->scoreboardListWidget);
+    unscii_font.setPointSize(15);
+    item->setFont(unscii_font);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {

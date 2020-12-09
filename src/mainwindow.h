@@ -37,6 +37,8 @@ private:
 
     QVector<Snake::Score> scoreboard;
 
+    QFont unscii_font;
+
     void resizeGameToView();
 
     bool loadScoreboard();
