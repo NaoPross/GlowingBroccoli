@@ -21,6 +21,7 @@ void Snake::setGameState(GameState state) {
     case GameState::PAUSED:
         if (m_timer.isActive())
             m_timer.stop();
+        update();
         qDebug("GameState::PLAY");
         emit gamePaused();
         break;
@@ -134,6 +135,23 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
         Qt::AlignCenter,
         QString("%1").arg(m_score.value, 6, 10, QLatin1Char('0'))
     );
+
+    if (gameState() == GameState::PAUSED) {
+        painter->setBrush(Qt::black);
+        const int pauseTextHeight = cellWidth * 5;
+        m_font.setPixelSize(pauseTextHeight);
+        painter->setFont(m_font);
+        const QRect pauseRect = QRect(
+            0, (m_gameRect.height() - pauseTextHeight) /2,
+            m_gameRect.width(), pauseTextHeight
+        );
+        painter->drawText(
+            pauseRect,
+            Qt::AlignCenter,
+            "PAUSED"
+        );
+
+    }
 
 }
 
