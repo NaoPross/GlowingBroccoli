@@ -37,6 +37,9 @@ void Snake::setGameState(GameState state) {
         if (m_timer.isActive())
             m_timer.stop();
         break;
+    case GameState::START:
+        update();
+        break;
     }
     m_gameState = state;
 }
@@ -96,7 +99,7 @@ void Snake::startNewGame(QString playerName) {
 
     /* start game */
     Q_ASSERT(!m_snake.isEmpty());
-    setGameState(GameState::PLAY);
+    setGameState(GameState::START);
 };
 
 void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
@@ -222,6 +225,10 @@ void Snake::generateFood() {
 bool Snake::eventFilter(QObject *obj, QEvent *event) {
      if (event->type() == QEvent::KeyPress) {
          QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+         if(m_gameState == GameState::START){
+             setGameState(GameState::PLAY);
+         }
 
          if (keyEvent->key() == Qt::Key_Escape) {
              if (m_gameState == GameState::PAUSED)
