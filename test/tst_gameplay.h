@@ -16,7 +16,7 @@ TEST(GamePlay, State)
     ASSERT_THAT(snake.gameState(), Snake::GameState::INVALID);
 
     snake.startNewGame("Test Player");
-    ASSERT_THAT(snake.gameState(), Snake::GameState::PLAY);
+    ASSERT_THAT(snake.gameState(), Snake::GameState::START);
 }
 
 TEST(GamePlay, Score)

@@ -47,6 +47,12 @@ MainWindow::MainWindow(QWidget *parent)
         ui->playBtn->setEnabled(!ui->playerNameEdit->text().isEmpty());
     });
 
+    connect(ui->playerNameEdit, &QLineEdit::returnPressed, this, [=]() {
+        if (ui->playBtn->isEnabled()){
+            ui->playBtn->click();
+        }
+    });
+
     // play button
     connect(ui->playBtn, &QPushButton::clicked, [=]() {
         // FIXME: the page is loaded twice because resizeGameToView uses

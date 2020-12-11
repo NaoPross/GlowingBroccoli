@@ -31,7 +31,7 @@ public:
     };
 
     /// \brief Possible states of the game
-    enum class GameState : unsigned { PLAY, PAUSED, OVER, INVALID };
+    enum class GameState : unsigned { PLAY, PAUSED, OVER, INVALID, START };
 
     Snake();
     virtual ~Snake();

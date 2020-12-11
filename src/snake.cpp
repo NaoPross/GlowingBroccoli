@@ -3,6 +3,7 @@
 #include <QRandomGenerator>
 #include <QGraphicsScene>
 #include <QFont>
+#include <QColor>
 
 Snake::Snake() : m_font("monospace") {
     m_font.setStyleHint(QFont::Monospace);
@@ -21,6 +22,7 @@ void Snake::setGameState(GameState state) {
     case GameState::PAUSED:
         if (m_timer.isActive())
             m_timer.stop();
+        update();
         qDebug("GameState::PLAY");
         emit gamePaused();
         break;
@@ -34,6 +36,9 @@ void Snake::setGameState(GameState state) {
         qDebug("GameState::INVALID");
         if (m_timer.isActive())
             m_timer.stop();
+        break;
+    case GameState::START:
+        update();
         break;
     }
     m_gameState = state;
@@ -94,7 +99,7 @@ void Snake::startNewGame(QString playerName) {
 
     /* start game */
     Q_ASSERT(!m_snake.isEmpty());
-    setGameState(GameState::PLAY);
+    setGameState(GameState::START);
 };
 
 void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
@@ -105,17 +110,17 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     const int cellWidth = static_cast<int>(m_gameRect.width() / static_cast<double>(m_gridsize));
 
     // draw game background
-    painter->fillRect(m_gameRect, Qt::white);
+    painter->fillRect(m_gameRect, QColor(0xF6F1D1));
 
     // draw snake
-    painter->setBrush(Qt::red); // head color
+    painter->setBrush(QColor(0xFF784F)); // head color
     for (Coordinate coord : m_snake) {
         painter->drawRect(coord.x * cellWidth, coord.y * cellWidth, cellWidth, cellWidth);
-        painter->setBrush(Qt::green); // body color
+        painter->setBrush(QColor(0x5B7553)); // body color
     }
 
     // draw food
-    painter->setBrush(Qt::yellow); //food color
+    painter->setBrush(QColor(0x006989)); //food color
     painter->drawRect(m_food.x * cellWidth, m_food.y  * cellWidth, cellWidth, cellWidth);
 
     // draw score
@@ -128,12 +133,30 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     const QRect scoreRect = QRect(
         scorePos.x * cellWidth, scorePos.y * cellWidth,
         cellWidth * 6, textHeight);
+    painter->setPen(QColor(0x00000F));
 
     painter->drawText(
         scoreRect,
         Qt::AlignCenter,
         QString("%1").arg(m_score.value, 6, 10, QLatin1Char('0'))
     );
+
+    if (gameState() == GameState::PAUSED) {
+        painter->setPen(QColor(0x00000F));
+        const int pauseTextHeight = cellWidth * 5;
+        m_font.setPixelSize(pauseTextHeight);
+        painter->setFont(m_font);
+        const QRect pauseRect = QRect(
+            0, (m_gameRect.height() - pauseTextHeight) /2,
+            m_gameRect.width(), pauseTextHeight
+        );
+        painter->drawText(
+            pauseRect,
+            Qt::AlignCenter,
+            "PAUSED"
+        );
+
+    }
 
 }
 
@@ -202,6 +225,10 @@ void Snake::generateFood() {
 bool Snake::eventFilter(QObject *obj, QEvent *event) {
      if (event->type() == QEvent::KeyPress) {
          QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+         if(m_gameState == GameState::START){
+             setGameState(GameState::PLAY);
+         }
 
          if (keyEvent->key() == Qt::Key_Escape) {
              if (m_gameState == GameState::PAUSED)
