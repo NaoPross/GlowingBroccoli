@@ -107,10 +107,22 @@ void MainWindow::loadPage(MainWindow::Page p) {
 }
 
 void MainWindow::addScore(Snake::Score s) {
-    QString score = QString("%1 - ").arg(s.value, 6, 10, QLatin1Char('0'));
-    QListWidgetItem *item = new QListWidgetItem(score + s.player, ui->scoreboardListWidget);
-    unscii_font.setPointSize(15);
-    item->setFont(unscii_font);
+    QString score = QString("%1 - ").arg(s.value, 6, 10, QLatin1Char('0')) + s.player;
+    if(!checkScoreboard(score)) {
+        QListWidgetItem *item = new QListWidgetItem(score, ui->scoreboardListWidget);
+        unscii_font.setPointSize(15);
+        item->setFont(unscii_font);
+    }
+}
+
+bool MainWindow::checkScoreboard(QString score) {
+    bool found = false;
+    for (int i = 0; i < ui->scoreboardListWidget->count(); ++i) {
+        if(ui->scoreboardListWidget->item(i)->text() == score) {
+            found = true;
+        }
+    }
+    return found;
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {

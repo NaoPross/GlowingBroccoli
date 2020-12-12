@@ -43,6 +43,7 @@ private:
 
     bool loadScoreboard();
     bool writeScoreboard();
+    bool checkScoreboard(QString score);
 };
 
 

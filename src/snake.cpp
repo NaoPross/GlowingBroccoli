@@ -130,9 +130,10 @@ void Snake::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
     // TODO(improvement): move the score when the snake and/or food is under it
     Coordinate scorePos = {1, 1};
+
     const QRect scoreRect = QRect(
         scorePos.x * cellWidth, scorePos.y * cellWidth,
-        cellWidth * 6, textHeight);
+        cellWidth * 8, textHeight);
     painter->setPen(QColor(0x00000F));
 
     painter->drawText(
