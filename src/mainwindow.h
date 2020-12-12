@@ -43,7 +43,7 @@ private:
 
     bool loadScoreboard();
     bool writeScoreboard();
-    bool checkScoreboard(Snake::Score s, QString score);
+    bool checkScoreboard(QString score);
 };
 
 
